@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "1c73901b-d288-403f-9249-475be341afef": {
+      "ProjectGuid": "1c73901b-d288-403f-9249-475be341afef",
+      "DisplayName": "Arduino_Controller",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
