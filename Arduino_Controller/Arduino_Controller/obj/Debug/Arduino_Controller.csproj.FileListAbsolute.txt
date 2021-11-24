@@ -19,3 +19,14 @@ C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Arduino_Controller\Arduino_Control
 C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.CoreCompileInputs.cache
 C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.exe
 C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.pdb
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.exe.config
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.exe
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.pdb
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.AssemblyReference.cache
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.SuggestedBindingRedirects.cache
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.Form1.resources
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.Properties.Resources.resources
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.GenerateResource.cache
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.CoreCompileInputs.cache
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.exe
+C:\Users\drapa_kmrggum\Desktop\Bakalarka-main\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.pdb

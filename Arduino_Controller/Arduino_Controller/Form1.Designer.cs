@@ -29,38 +29,13 @@ namespace Arduino_Controller
         /// </summary>
         private void InitializeComponent()
         {
-            this.redLEDButton = new System.Windows.Forms.Button();
-            this.redLEDCheckBox = new System.Windows.Forms.CheckBox();
             this.serialPorts = new System.Windows.Forms.ComboBox();
             this.connectedCheckBox = new System.Windows.Forms.CheckBox();
             this.connectButton = new System.Windows.Forms.Button();
             this.disconnectButton = new System.Windows.Forms.Button();
-            this.greenLEDButton = new System.Windows.Forms.Button();
-            this.yellowLEDButton = new System.Windows.Forms.Button();
-            this.greenLEDCheckBox = new System.Windows.Forms.CheckBox();
-            this.yellowLEDCheckBox = new System.Windows.Forms.CheckBox();
-            this.qualitySelector = new System.Windows.Forms.ComboBox();
+            this.StartButton = new System.Windows.Forms.Button();
+            this.qualitySelectComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // redLEDButton
-            // 
-            this.redLEDButton.Location = new System.Drawing.Point(407, 223);
-            this.redLEDButton.Name = "redLEDButton";
-            this.redLEDButton.Size = new System.Drawing.Size(75, 23);
-            this.redLEDButton.TabIndex = 0;
-            this.redLEDButton.Text = "Red LED";
-            this.redLEDButton.UseVisualStyleBackColor = true;
-            this.redLEDButton.Click += new System.EventHandler(this.redLEDButton_Click);
-            // 
-            // redLEDCheckBox
-            // 
-            this.redLEDCheckBox.AutoSize = true;
-            this.redLEDCheckBox.Location = new System.Drawing.Point(407, 167);
-            this.redLEDCheckBox.Name = "redLEDCheckBox";
-            this.redLEDCheckBox.Size = new System.Drawing.Size(65, 17);
-            this.redLEDCheckBox.TabIndex = 1;
-            this.redLEDCheckBox.Text = "Red ON";
-            this.redLEDCheckBox.UseVisualStyleBackColor = true;
             // 
             // serialPorts
             // 
@@ -101,62 +76,36 @@ namespace Arduino_Controller
             this.disconnectButton.UseVisualStyleBackColor = true;
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
-            // greenLEDButton
+            // StartButton
             // 
-            this.greenLEDButton.Location = new System.Drawing.Point(531, 223);
-            this.greenLEDButton.Name = "greenLEDButton";
-            this.greenLEDButton.Size = new System.Drawing.Size(75, 23);
-            this.greenLEDButton.TabIndex = 6;
-            this.greenLEDButton.Text = "Green LED";
-            this.greenLEDButton.UseVisualStyleBackColor = true;
-            this.greenLEDButton.Click += new System.EventHandler(this.greenLEDButton_Click);
+            this.StartButton.Location = new System.Drawing.Point(594, 305);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(75, 23);
+            this.StartButton.TabIndex = 6;
+            this.StartButton.Text = "Start";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
-            // yellowLEDButton
+            // qualitySelectComboBox
             // 
-            this.yellowLEDButton.Location = new System.Drawing.Point(663, 223);
-            this.yellowLEDButton.Name = "yellowLEDButton";
-            this.yellowLEDButton.Size = new System.Drawing.Size(75, 23);
-            this.yellowLEDButton.TabIndex = 7;
-            this.yellowLEDButton.Text = "Yellow LED";
-            this.yellowLEDButton.UseVisualStyleBackColor = true;
-            this.yellowLEDButton.Click += new System.EventHandler(this.yellowLEDButton_Click);
-            // 
-            // greenLEDCheckBox
-            // 
-            this.greenLEDCheckBox.AutoSize = true;
-            this.greenLEDCheckBox.Location = new System.Drawing.Point(531, 167);
-            this.greenLEDCheckBox.Name = "greenLEDCheckBox";
-            this.greenLEDCheckBox.Size = new System.Drawing.Size(74, 17);
-            this.greenLEDCheckBox.TabIndex = 8;
-            this.greenLEDCheckBox.Text = "Green ON";
-            this.greenLEDCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // yellowLEDCheckBox
-            // 
-            this.yellowLEDCheckBox.AutoSize = true;
-            this.yellowLEDCheckBox.Location = new System.Drawing.Point(663, 167);
-            this.yellowLEDCheckBox.Name = "yellowLEDCheckBox";
-            this.yellowLEDCheckBox.Size = new System.Drawing.Size(76, 17);
-            this.yellowLEDCheckBox.TabIndex = 9;
-            this.yellowLEDCheckBox.Text = "Yellow ON";
-            this.yellowLEDCheckBox.UseVisualStyleBackColor = true;
+            this.qualitySelectComboBox.FormattingEnabled = true;
+            this.qualitySelectComboBox.Location = new System.Drawing.Point(401, 305);
+            this.qualitySelectComboBox.Name = "qualitySelectComboBox";
+            this.qualitySelectComboBox.Size = new System.Drawing.Size(121, 21);
+            this.qualitySelectComboBox.TabIndex = 7;
+            this.qualitySelectComboBox.SelectedIndexChanged += new System.EventHandler(this.qualitySelectComboBox_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.qualitySelector);
-            this.Controls.Add(this.yellowLEDCheckBox);
-            this.Controls.Add(this.greenLEDCheckBox);
-            this.Controls.Add(this.yellowLEDButton);
-            this.Controls.Add(this.greenLEDButton);
+            this.Controls.Add(this.qualitySelectComboBox);
+            this.Controls.Add(this.StartButton);
             this.Controls.Add(this.disconnectButton);
             this.Controls.Add(this.connectButton);
             this.Controls.Add(this.connectedCheckBox);
             this.Controls.Add(this.serialPorts);
-            this.Controls.Add(this.redLEDCheckBox);
-            this.Controls.Add(this.redLEDButton);
             this.Name = "Form1";
             this.Text = "Form1";
             this.TopMost = true;
@@ -166,18 +115,12 @@ namespace Arduino_Controller
         }
 
         #endregion
-
-        private System.Windows.Forms.Button redLEDButton;
-        private System.Windows.Forms.CheckBox redLEDCheckBox;
         private System.Windows.Forms.ComboBox serialPorts;
         private System.Windows.Forms.CheckBox connectedCheckBox;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Button disconnectButton;
-        private System.Windows.Forms.Button greenLEDButton;
-        private System.Windows.Forms.Button yellowLEDButton;
-        private System.Windows.Forms.CheckBox greenLEDCheckBox;
-        private System.Windows.Forms.CheckBox yellowLEDCheckBox;
-        private System.Windows.Forms.ComboBox qualitySelector;
+        private System.Windows.Forms.Button StartButton;
+        private System.Windows.Forms.ComboBox qualitySelectComboBox;
     }
 }
 

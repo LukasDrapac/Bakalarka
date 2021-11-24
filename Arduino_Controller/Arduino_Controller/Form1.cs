@@ -17,6 +17,7 @@ namespace Arduino_Controller
         bool isConnected = false;
         String[] ports;
         SerialPort port;
+
         string commandString;
         string numberOfSteps;
 
@@ -25,7 +26,7 @@ namespace Arduino_Controller
             InitializeComponent();
             disableControls();
             getAvailablePorts();
-            qualitySelect();
+            qualityComboboxInit();
         }
 
         private void connectToArduino()
@@ -38,9 +39,7 @@ namespace Arduino_Controller
             port.DataBits = 8;
             try
             {
-                port.Open();
-
-                qualitySelect();
+                port.Open();                
 
                 commandString = "START";
                 string message = makeMessage();
@@ -56,7 +55,7 @@ namespace Arduino_Controller
                 {
                     isConnected = true;
                     connectedCheckBox.Checked = true;
-                    enableControls();
+                    controllsAfterStart();
                     Console.WriteLine("API:  Connected!");
                 }
                 else
@@ -81,23 +80,16 @@ namespace Arduino_Controller
 
 
         private void disableControls()
-        {
-            redLEDButton.Enabled = false;
-            redLEDCheckBox.Enabled = false;
-            greenLEDButton.Enabled = false;
-            greenLEDCheckBox.Enabled = false;
-            yellowLEDButton.Enabled = false;
-            yellowLEDCheckBox.Enabled = false;
+        {            
             connectButton.Enabled = true;
         }
 
-        private void enableControls()
+        private void controllsAfterStart()
         {
-            redLEDButton.Enabled = true;
-            greenLEDButton.Enabled = true;
-            yellowLEDButton.Enabled = true;
             connectButton.Enabled = false;
             disconnectButton.Enabled = true;
+
+
         }
 
         void getAvailablePorts()
@@ -123,101 +115,36 @@ namespace Arduino_Controller
         private void disconnectButton_Click(object sender, EventArgs e)
         {
             disconnectArduino();
-        }
-
-        private void redLEDButton_Click(object sender, EventArgs e)
-        {
-            commandString = "LEFT0";
-            string message = makeMessage();
-            port.WriteLine(message);
-            Console.WriteLine("API:  " + message);
-
-            redLEDCheckBox.Checked = true;
-
-            string answer = port.ReadLine();
-            Console.WriteLine("Arduino:  " + answer);
-
-            if(answer == makeDoneMessage())
-            {
-                redLEDCheckBox.Checked = false;
-            }
-            else
-            {
-                Console.WriteLine(answer + " is unknown command");
-            }
-        }
-
-        private void greenLEDButton_Click(object sender, EventArgs e)
-        {
-            commandString = "HOME0";
-            string message = makeMessage();
-            port.WriteLine(message);
-            Console.WriteLine("API:  " + message);
-
-            redLEDCheckBox.Checked = true;
-
-            string answer = port.ReadLine();
-            Console.WriteLine("Arduino:  " + answer);
-
-            if (answer == makeDoneMessage())
-            {
-                redLEDCheckBox.Checked = false;
-            }
-            else
-            {
-                Console.WriteLine(answer + " is unknown command");
-            }
-        }
-
-        private void yellowLEDButton_Click(object sender, EventArgs e)
-        {
-            commandString = "RIGHT";
-            string message = makeMessage();
-            port.WriteLine(message);
-            Console.WriteLine("API:  " + message);
-
-            redLEDCheckBox.Checked = true;
-
-            string answer = port.ReadLine();
-            Console.WriteLine("Arduino:  " + answer);
-
-            if (answer == makeDoneMessage())
-            {
-                redLEDCheckBox.Checked = false;
-            }
-            else
-            {
-                Console.WriteLine(answer + " is unknown command");
-            }
-        }
-
-        private void qualitySelect()
-        {
-            int quality = 1;
-
+        }        
+        
+        private void qualitySelect(int quality)
+        {       
             switch (quality)
             {
                 case 0:
-                    numberOfSteps = "010"; 
+                    numberOfSteps = "320"; 
                     break;
                 case 1:
-                    numberOfSteps = "030";
+                    numberOfSteps = "160";
                     break;
                 case 2:
-                    numberOfSteps = "050";
+                    numberOfSteps = "106";
                     break;
                 case 3:
-                    numberOfSteps = "070";
+                    numberOfSteps = "080";
                     break;
                 case 4:
-                    numberOfSteps = "090";
+                    numberOfSteps = "064";
                     break;
             }
+
+            Console.WriteLine(numberOfSteps);
         }
 
         private string makeMessage()
         {
             string message = commandString + "/" + numberOfSteps + "\n";
+            Console.WriteLine(message);
             return message;
         }
 
@@ -225,6 +152,33 @@ namespace Arduino_Controller
         {
             string message = commandString + "/" + numberOfSteps + "/DONE";
             return message;
+        }
+        private void qualityComboboxInit()
+        {
+            string[] quality = {"Nejnižší", "Nízká", "Střední", "Vysoká", "Nejvyšší" };
+            foreach (string possibility in quality)
+            {
+                qualitySelectComboBox.Items.Add(possibility);
+            }
+        }
+
+        private void qualitySelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {      
+            int selectedQuality = qualitySelectComboBox.SelectedIndex;            
+            qualitySelect(selectedQuality);
+        }
+
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            commandString = "CLK00";
+            string message = makeMessage();
+            int runs = 1600 / int.Parse(numberOfSteps);
+
+            for (int n = 0; n < runs; n++)
+            {
+                port.WriteLine(message);
+                Thread.Sleep(500);
+            }
         }
     }
 }

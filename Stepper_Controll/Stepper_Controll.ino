@@ -30,7 +30,7 @@ void loop() {
 
 void parseMessage(String stringToParse){
   String commandString = stringToParse.substring(0,5);
-  String stepsString = stringToParse.substring(7,11); 
+  String stepsString = stringToParse.substring(6,11); 
   int stepsInt = stepsString.toInt();
   //Serial.println(stringToParse);
   //Serial.println(stepsInt);
@@ -42,15 +42,15 @@ void parseMessage(String stringToParse){
     Serial.print(answer);
   }
     
-  else if(commandString == "LEFT0"){
-
+  else if(commandString == "CLK00"){
+    commandCLK00(stepsInt);
     String answer = stringToParse + "/DONE\n";
     Serial.print(answer); 
     
   }
   
-  else if(commandString == "RIGHT"){
-
+  else if(commandString == "CTCLK"){
+    commandCTCLK(stepsInt);
     String answer = stringToParse + "/DONE\n";
     Serial.print(answer); 
   }
@@ -76,11 +76,21 @@ void startCommand(){
  }
 }
 
-void commandLeft(int steps){
-  
+void commandCLK00(int steps){
+  for(int n = 0; n < steps; n++){
+    digitalWrite(STEP, HIGH);
+    delayMicroseconds(400);
+    digitalWrite(STEP, LOW);
+    delayMicroseconds(400);
+  }
 }
-void commandRight(int steps){
-  
+void commandCTCLK(int steps){
+  for(int n = 0; n < steps; n++){
+    digitalWrite(STEP, HIGH);
+    delayMicroseconds(400);
+    digitalWrite(STEP, LOW);
+    delayMicroseconds(400);
+  }
 }
 
 void serialEvent() {
