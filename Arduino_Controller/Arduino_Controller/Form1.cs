@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
+using AForge;
+using AForge.Video;
+using AForge.Video.DirectShow;
 
 namespace Arduino_Controller
 {
@@ -20,6 +23,12 @@ namespace Arduino_Controller
 
         string commandString;
         string numberOfSteps;
+
+        FilterInfoCollection filterInfoCollection;
+        VideoCaptureDevice videoCaptureDevice;
+        private VideoCapabilities[] videoCapabilities;
+        private VideoCapabilities[] snapshotCapabilities;
+
 
         public Form1()
         {
@@ -43,7 +52,7 @@ namespace Arduino_Controller
 
                 commandString = "START";
                 string message = makeMessage();
-                Console.WriteLine("API:  " + message);
+                Console.WriteLine("APP:  " + message);
                 port.WriteLine(message);                
 
                 Thread.Sleep(1000);
@@ -56,7 +65,7 @@ namespace Arduino_Controller
                     isConnected = true;
                     connectedCheckBox.Checked = true;
                     controllsAfterStart();
-                    Console.WriteLine("API:  Connected!");
+                    Console.WriteLine("Connected!");
                 }
                 else
                 {
@@ -68,6 +77,44 @@ namespace Arduino_Controller
             catch { }
         }
 
+        private void connectCamera()
+        {         
+            videoCaptureDevice = new VideoCaptureDevice(filterInfoCollection[camBox.SelectedIndex].MonikerString);
+            videoCaptureDevice.ProvideSnapshots = true;
+            videoCaptureDevice.NewFrame += new NewFrameEventHandler(videoCaptureDevice_NewFrame);
+            //videoCaptureDevice.SnapshotFrame += new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
+
+            videoSourcePlayer.VideoSource = videoCaptureDevice;
+            videoSourcePlayer.Start();
+            Console.WriteLine("Camera connected");
+        }
+
+        private void disconnectCamera()
+        {
+            videoSourcePlayer.SignalToStop();
+            videoSourcePlayer.WaitForStop();
+            videoSourcePlayer.VideoSource = null;
+
+            if (videoCaptureDevice.ProvideSnapshots)
+            {
+                videoCaptureDevice.SnapshotFrame -= new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
+            }
+            Console.WriteLine("Camera disconnected");
+        }
+
+        private void videoCaptureDevice_SnapshotFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            //Console.WriteLine(eventArgs.Frame.Size);
+            //Console.WriteLine("Check1");
+            //pictureBox.Image = (Bitmap)eventArgs.Frame.Clone();
+        }
+
+        private void videoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            //Console.WriteLine("Check2");
+            //Console.WriteLine(eventArgs.Frame.Size);
+            //videoBox.Image = (Bitmap)eventArgs.Frame.Clone();
+        }
         private void disconnectArduino()
         {
             port.Close();
@@ -76,6 +123,21 @@ namespace Arduino_Controller
             disableControls();
 
             Console.WriteLine("Arduino disconnected");
+        }
+
+        private void makeSnapshot_Click(object sender, EventArgs eventArgs)
+        {
+            //Console.WriteLine(eventArgs.Frame.Size);
+            pictureBox.Image = videoSourcePlayer.GetCurrentVideoFrame();
+            //Console.WriteLine("Check3");            
+        }
+
+        private void takeSnapshot()
+        {
+            Console.WriteLine("Snapshot taken");
+            Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
+            pictureBox.Image = snapshot;
+
         }
 
 
@@ -109,12 +171,14 @@ namespace Arduino_Controller
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            connectToArduino();          
+            connectToArduino();
+            connectCamera();
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)
         {
             disconnectArduino();
+            disconnectCamera();
         }        
         
         private void qualitySelect(int quality)
@@ -176,9 +240,23 @@ namespace Arduino_Controller
 
             for (int n = 0; n < runs; n++)
             {
+                takeSnapshot();
                 port.WriteLine(message);
-                Thread.Sleep(500);
+                Console.WriteLine(port.ReadLine());
+                //Thread.Sleep(2500);                
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (FilterInfo filterInfo in filterInfoCollection)
+            {
+                camBox.Items.Add(filterInfo.Name);
+            }
+
+            camBox.SelectedIndex = 0;
+            Console.WriteLine("Video devices found");
         }
     }
 }
