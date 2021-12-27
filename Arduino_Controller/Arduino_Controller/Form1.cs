@@ -83,8 +83,6 @@ namespace Arduino_Controller
         {         
             videoCaptureDevice = new VideoCaptureDevice(filterInfoCollection[camBox.SelectedIndex].MonikerString);
             videoCaptureDevice.ProvideSnapshots = true;
-            //videoCaptureDevice.NewFrame += new NewFrameEventHandler(videoCaptureDevice_NewFrame);
-            //videoCaptureDevice.SnapshotFrame += new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
 
             videoSourcePlayer.VideoSource = videoCaptureDevice;
             videoSourcePlayer.Start();
@@ -97,26 +95,9 @@ namespace Arduino_Controller
             videoSourcePlayer.WaitForStop();
             videoSourcePlayer.VideoSource = null;
 
-            if (videoCaptureDevice.ProvideSnapshots)
-            {
-                //videoCaptureDevice.SnapshotFrame -= new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
-            }
             Console.WriteLine("Camera disconnected");
         }
 
-        //private void videoCaptureDevice_SnapshotFrame(object sender, NewFrameEventArgs eventArgs)
-        //{
-        //    //Console.WriteLine(eventArgs.Frame.Size);
-        //    //Console.WriteLine("Check1");
-        //    //pictureBox.Image = (Bitmap)eventArgs.Frame.Clone();
-        //}
-        //
-        //private void videoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        //{
-        //    //Console.WriteLine("Check2");
-        //    //Console.WriteLine(eventArgs.Frame.Size);
-        //    //videoBox.Image = (Bitmap)eventArgs.Frame.Clone();
-        //}
         private void disconnectArduino()
         {
             port.Close();
@@ -129,7 +110,6 @@ namespace Arduino_Controller
 
         private void makeSnapshot_Click(object sender, EventArgs eventArgs)
         {
-            //Console.WriteLine(eventArgs.Frame.Size);
             Bitmap bmp = videoSourcePlayer.GetCurrentVideoFrame();
             pictureBox.Image = bmp;
             string path = imageFolderPath + "/" + imageName.ToString() + ".jpg";
@@ -251,7 +231,6 @@ namespace Arduino_Controller
                 takeSnapshot();
                 await Task.Delay(1000);
                 port.WriteLine(message);
-                //Console.WriteLine(port.ReadLine());
                 await Task.Delay(1000);
 
                 string answer = port.ReadLine();
