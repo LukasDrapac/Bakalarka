@@ -37,12 +37,16 @@ namespace Arduino_Controller
             this.qualitySelectComboBox = new System.Windows.Forms.ComboBox();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.camBox = new System.Windows.Forms.ComboBox();
-            this.camCheckBox = new System.Windows.Forms.CheckBox();
+            this.camConnectCheckBox = new System.Windows.Forms.CheckBox();
             this.serialPortsLabel = new System.Windows.Forms.Label();
             this.camLabel = new System.Windows.Forms.Label();
             this.qualitySelectorLabel = new System.Windows.Forms.Label();
             this.makeSnapshot = new System.Windows.Forms.Button();
             this.videoSourcePlayer = new AForge.Controls.VideoSourcePlayer();
+            this.snapshotResolutionComBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.inventoryNumber = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -129,17 +133,17 @@ namespace Arduino_Controller
             this.camBox.Size = new System.Drawing.Size(180, 28);
             this.camBox.TabIndex = 11;
             // 
-            // camCheckBox
+            // camConnectCheckBox
             // 
-            this.camCheckBox.AutoSize = true;
-            this.camCheckBox.Enabled = false;
-            this.camCheckBox.Location = new System.Drawing.Point(232, 572);
-            this.camCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.camCheckBox.Name = "camCheckBox";
-            this.camCheckBox.Size = new System.Drawing.Size(152, 24);
-            this.camCheckBox.TabIndex = 12;
-            this.camCheckBox.Text = "Kamera připojena";
-            this.camCheckBox.UseVisualStyleBackColor = true;
+            this.camConnectCheckBox.AutoSize = true;
+            this.camConnectCheckBox.Enabled = false;
+            this.camConnectCheckBox.Location = new System.Drawing.Point(232, 572);
+            this.camConnectCheckBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.camConnectCheckBox.Name = "camConnectCheckBox";
+            this.camConnectCheckBox.Size = new System.Drawing.Size(152, 24);
+            this.camConnectCheckBox.TabIndex = 12;
+            this.camConnectCheckBox.Text = "Kamera připojena";
+            this.camConnectCheckBox.UseVisualStyleBackColor = true;
             // 
             // serialPortsLabel
             // 
@@ -164,9 +168,9 @@ namespace Arduino_Controller
             this.qualitySelectorLabel.AutoSize = true;
             this.qualitySelectorLabel.Location = new System.Drawing.Point(598, 460);
             this.qualitySelectorLabel.Name = "qualitySelectorLabel";
-            this.qualitySelectorLabel.Size = new System.Drawing.Size(55, 20);
+            this.qualitySelectorLabel.Size = new System.Drawing.Size(104, 20);
             this.qualitySelectorLabel.TabIndex = 15;
-            this.qualitySelectorLabel.Text = "Kvalita";
+            this.qualitySelectorLabel.Text = "Počet snímků";
             // 
             // makeSnapshot
             // 
@@ -188,17 +192,54 @@ namespace Arduino_Controller
             this.videoSourcePlayer.Text = "videoSourcePlayer1";
             this.videoSourcePlayer.VideoSource = null;
             // 
+            // snapshotResolutionComBox
+            // 
+            this.snapshotResolutionComBox.FormattingEnabled = true;
+            this.snapshotResolutionComBox.Location = new System.Drawing.Point(30, 646);
+            this.snapshotResolutionComBox.Name = "snapshotResolutionComBox";
+            this.snapshotResolutionComBox.Size = new System.Drawing.Size(180, 28);
+            this.snapshotResolutionComBox.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(26, 621);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(127, 20);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Rozlišení snímků";
+            // 
+            // inventoryNumber
+            // 
+            this.inventoryNumber.Location = new System.Drawing.Point(602, 571);
+            this.inventoryNumber.Name = "inventoryNumber";
+            this.inventoryNumber.Size = new System.Drawing.Size(180, 26);
+            this.inventoryNumber.TabIndex = 20;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(598, 542);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(171, 20);
+            this.label2.TabIndex = 21;
+            this.label2.Text = "Inventární číslo kraslice";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1350, 692);
+            this.ClientSize = new System.Drawing.Size(1350, 748);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.inventoryNumber);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.snapshotResolutionComBox);
             this.Controls.Add(this.videoSourcePlayer);
             this.Controls.Add(this.makeSnapshot);
             this.Controls.Add(this.qualitySelectorLabel);
             this.Controls.Add(this.camLabel);
             this.Controls.Add(this.serialPortsLabel);
-            this.Controls.Add(this.camCheckBox);
+            this.Controls.Add(this.camConnectCheckBox);
             this.Controls.Add(this.camBox);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.qualitySelectComboBox);
@@ -227,12 +268,16 @@ namespace Arduino_Controller
         private System.Windows.Forms.ComboBox qualitySelectComboBox;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.ComboBox camBox;
-        private System.Windows.Forms.CheckBox camCheckBox;
+        private System.Windows.Forms.CheckBox camConnectCheckBox;
         private System.Windows.Forms.Label serialPortsLabel;
         private System.Windows.Forms.Label camLabel;
         private System.Windows.Forms.Label qualitySelectorLabel;
         private System.Windows.Forms.Button makeSnapshot;
         private AForge.Controls.VideoSourcePlayer videoSourcePlayer;
+        private System.Windows.Forms.ComboBox snapshotResolutionComBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox inventoryNumber;
+        private System.Windows.Forms.Label label2;
     }
 }
 
