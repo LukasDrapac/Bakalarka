@@ -23,6 +23,8 @@ namespace Arduino_Controller
 
         string commandString;
         string numberOfSteps;
+        int imageName = 0;
+        string imageFolderPath = "C:/Users/drapa_kmrggum/Desktop/Fotky";
 
         FilterInfoCollection filterInfoCollection;
         VideoCaptureDevice videoCaptureDevice;
@@ -38,7 +40,7 @@ namespace Arduino_Controller
             qualityComboboxInit();
         }
 
-        private void connectToArduino()
+        private async void connectToArduino()
         {
             string selectedPort = serialPorts.GetItemText(serialPorts.SelectedItem);
             port = new SerialPort(selectedPort);
@@ -55,7 +57,7 @@ namespace Arduino_Controller
                 Console.WriteLine("APP:  " + message);
                 port.WriteLine(message);                
 
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
 
                 string answer = port.ReadLine();
                 Console.WriteLine("Arduino:  " + answer);
@@ -81,7 +83,7 @@ namespace Arduino_Controller
         {         
             videoCaptureDevice = new VideoCaptureDevice(filterInfoCollection[camBox.SelectedIndex].MonikerString);
             videoCaptureDevice.ProvideSnapshots = true;
-            videoCaptureDevice.NewFrame += new NewFrameEventHandler(videoCaptureDevice_NewFrame);
+            //videoCaptureDevice.NewFrame += new NewFrameEventHandler(videoCaptureDevice_NewFrame);
             //videoCaptureDevice.SnapshotFrame += new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
 
             videoSourcePlayer.VideoSource = videoCaptureDevice;
@@ -97,24 +99,24 @@ namespace Arduino_Controller
 
             if (videoCaptureDevice.ProvideSnapshots)
             {
-                videoCaptureDevice.SnapshotFrame -= new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
+                //videoCaptureDevice.SnapshotFrame -= new NewFrameEventHandler(videoCaptureDevice_SnapshotFrame);
             }
             Console.WriteLine("Camera disconnected");
         }
 
-        private void videoCaptureDevice_SnapshotFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            //Console.WriteLine(eventArgs.Frame.Size);
-            //Console.WriteLine("Check1");
-            //pictureBox.Image = (Bitmap)eventArgs.Frame.Clone();
-        }
-
-        private void videoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            //Console.WriteLine("Check2");
-            //Console.WriteLine(eventArgs.Frame.Size);
-            //videoBox.Image = (Bitmap)eventArgs.Frame.Clone();
-        }
+        //private void videoCaptureDevice_SnapshotFrame(object sender, NewFrameEventArgs eventArgs)
+        //{
+        //    //Console.WriteLine(eventArgs.Frame.Size);
+        //    //Console.WriteLine("Check1");
+        //    //pictureBox.Image = (Bitmap)eventArgs.Frame.Clone();
+        //}
+        //
+        //private void videoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        //{
+        //    //Console.WriteLine("Check2");
+        //    //Console.WriteLine(eventArgs.Frame.Size);
+        //    //videoBox.Image = (Bitmap)eventArgs.Frame.Clone();
+        //}
         private void disconnectArduino()
         {
             port.Close();
@@ -128,8 +130,12 @@ namespace Arduino_Controller
         private void makeSnapshot_Click(object sender, EventArgs eventArgs)
         {
             //Console.WriteLine(eventArgs.Frame.Size);
-            pictureBox.Image = videoSourcePlayer.GetCurrentVideoFrame();
-            //Console.WriteLine("Check3");            
+            Bitmap bmp = videoSourcePlayer.GetCurrentVideoFrame();
+            pictureBox.Image = bmp;
+            string path = imageFolderPath + "/" + imageName.ToString() + ".jpg";
+            bmp.Save(path);
+            imageName++;
+            
         }
 
         private void takeSnapshot()
@@ -137,7 +143,9 @@ namespace Arduino_Controller
             Console.WriteLine("Snapshot taken");
             Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
             pictureBox.Image = snapshot;
-
+            string path = imageFolderPath + "/" + imageName.ToString() + ".jpg";
+            snapshot.Save(path);
+            imageName++;
         }
 
 
@@ -232,7 +240,7 @@ namespace Arduino_Controller
             qualitySelect(selectedQuality);
         }
 
-        private void StartButton_Click(object sender, EventArgs e)
+        private async void StartButton_Click(object sender, EventArgs e)
         {
             commandString = "CLK00";
             string message = makeMessage();
@@ -241,9 +249,23 @@ namespace Arduino_Controller
             for (int n = 0; n < runs; n++)
             {
                 takeSnapshot();
+                await Task.Delay(1000);
                 port.WriteLine(message);
-                Console.WriteLine(port.ReadLine());
-                //Thread.Sleep(2500);                
+                //Console.WriteLine(port.ReadLine());
+                await Task.Delay(1000);
+
+                string answer = port.ReadLine();
+
+                if (answer == makeDoneMessage())
+                {
+                    isConnected = true;
+                    connectedCheckBox.Checked = true;
+                    Console.WriteLine(answer);
+                }
+                else
+                {
+                    Console.WriteLine("Step failed");
+                }
             }
         }
 
