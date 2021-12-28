@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
+using System.IO;
 using AForge;
 using AForge.Video;
 using AForge.Video.DirectShow;
@@ -17,13 +18,13 @@ namespace Arduino_Controller
 {
     public partial class Form1 : Form
     {
-        bool isConnected = false;
         String[] ports;
         SerialPort port;
 
+        string rootImageFolderPath;
+        string folderPath;
         string commandString;
         string numberOfSteps;
-        string imageFolderPath = "C:/Users/drapa_kmrggum/Desktop/Fotky";
 
         FilterInfoCollection filterInfoCollection;
         VideoCaptureDevice videoCaptureDevice;
@@ -63,14 +64,12 @@ namespace Arduino_Controller
 
                 if (answer == makeDoneMessage())
                 {
-                    isConnected = true;
                     connectedCheckBox.Checked = true;
                     Console.WriteLine("Connected!");
                 }
                 else
                 {
                     disconnectArduino();
-                    isConnected = false;
                     Console.WriteLine("Not Connected");
                 }
             }
@@ -85,10 +84,10 @@ namespace Arduino_Controller
             snapshotCapabilities = videoCaptureDevice.SnapshotCapabilities;
             videoCapabilities = videoCaptureDevice.VideoCapabilities;
 
-            foreach(VideoCapabilities info in snapshotCapabilities)
-            {
-                snapshotResolutionComBox.Items.Add(info.FrameSize);
-            }
+            //foreach(VideoCapabilities info in snapshotCapabilities)
+            //{
+            //    snapshotResolutionComBox.Items.Add(info.FrameSize);
+            //}
 
             videoCapabilities = videoCaptureDevice.VideoCapabilities;
             snapshotCapabilities = videoCaptureDevice.SnapshotCapabilities;
@@ -114,7 +113,6 @@ namespace Arduino_Controller
         private void disconnectArduino()
         {
             port.Close();
-            isConnected = false;
 
             connectedCheckBox.Enabled = false;
             Console.WriteLine("Arduino disconnected");
@@ -134,7 +132,7 @@ namespace Arduino_Controller
             Console.WriteLine("Snapshot taken");
             Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
             pictureBox.Image = snapshot;
-            string path = imageFolderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
+            string path = folderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
             snapshot.Save(path);
         }
 
@@ -145,6 +143,8 @@ namespace Arduino_Controller
             camBox.Enabled = false;
             connectButton.Enabled = false;
             StartButton.Enabled = false;
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
 
             disconnectButton.Enabled = true;
             makeSnapshot.Enabled = true;
@@ -157,7 +157,9 @@ namespace Arduino_Controller
             makeSnapshot.Enabled = false;
             qualitySelectComboBox.Enabled = false;
             StartButton.Enabled = false;
-            
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
+
             connectButton.Enabled = true;
             camBox.Enabled = true;
             serialPorts.Enabled = true;
@@ -172,6 +174,8 @@ namespace Arduino_Controller
             connectButton.Enabled = false;
             camBox.Enabled = false;
             serialPorts.Enabled = false;
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
         }
         private void controllsReadyToStartImaging()
         {
@@ -179,6 +183,8 @@ namespace Arduino_Controller
             camBox.Enabled = false;
             connectButton.Enabled = false;
 
+            folderBrowsingButton.Enabled = true;
+            inventoryNumber.Enabled = true;
             StartButton.Enabled = true;
             disconnectButton.Enabled = true;
             makeSnapshot.Enabled = true;
@@ -252,7 +258,7 @@ namespace Arduino_Controller
         }
         private void qualityComboboxInit()
         {
-            string[] quality = {"Nejnižší", "Nízká", "Střední", "Vysoká", "Nejvyšší" };
+            string[] quality = {"5", "10", "15", "20", "25" };
             foreach (string possibility in quality)
             {
                 qualitySelectComboBox.Items.Add(possibility);
@@ -281,35 +287,44 @@ namespace Arduino_Controller
 
         private async void StartButton_Click(object sender, EventArgs e)
         {
-            commandString = "CLK00";
-            string message = makeMessage();
-            int runs = 1600 / int.Parse(numberOfSteps);
-            controllsDuringImaging();
+            if(inventoryNumber.Text != "" & folderPath != ""){
+                createFolder();
 
-            int imageNumber = 1;
-            for (int n = 0; n < runs; n++)
-            {
-                takeSnapshot(imageNumber);
-                imageNumber++;
+                commandString = "CLK00";
+                string message = makeMessage();
+                int runs = 1600 / int.Parse(numberOfSteps);
+                controllsDuringImaging();
 
-                await Task.Delay(1000);
-                port.WriteLine(message);
-                await Task.Delay(1000);
-
-                string answer = port.ReadLine();
-
-                if (answer == makeDoneMessage())
+                int imageNumber = 1;
+                for (int n = 0; n < runs; n++)
                 {
-                    isConnected = true;
-                    connectedCheckBox.Checked = true;
-                    Console.WriteLine(answer);
+                    takeSnapshot(imageNumber);
+                    imageNumber++;
+
+                    await Task.Delay(1000);
+                    port.WriteLine(message);
+
+                
+                    string answer = port.ReadLine();
+
+                    if (answer == makeDoneMessage())
+                    {
+                        connectedCheckBox.Checked = true;
+                        Console.WriteLine(answer);
+                        await Task.Delay(1000);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Step failed");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Step failed");
-                }                
+                controllsReadyToStartImaging();
             }
-            controllsReadyToStartImaging();
+            else
+            {
+                MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
+            }
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -322,6 +337,22 @@ namespace Arduino_Controller
 
             camBox.SelectedIndex = 0;
             Console.WriteLine("Video devices found");
+        }
+
+        private void createFolder()
+        {
+            folderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
+            Console.WriteLine(folderPath);
+            Directory.CreateDirectory(folderPath);
+        }
+
+        private void folderBrowsingButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog browserDialog = new FolderBrowserDialog();
+            if(browserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                rootImageFolderPath = browserDialog.SelectedPath;                
+            }
         }
     }
 }

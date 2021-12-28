@@ -78,18 +78,18 @@ void startCommand(){
 
 void commandCLK00(int steps){
   for(int n = 0; n < steps; n++){
-    digitalWrite(STEP, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    delayMicroseconds(1000);
+  digitalWrite(STEP, HIGH);
+  delayMicroseconds(1500);
+  digitalWrite(STEP, LOW);
+  delayMicroseconds(1500);
   }
 }
 void commandCTCLK(int steps){
   for(int n = 0; n < steps; n++){
-    digitalWrite(STEP, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(STEP, LOW);
-    delayMicroseconds(1000);
+  digitalWrite(STEP, HIGH);
+  delayMicroseconds(1500);
+  digitalWrite(STEP, LOW);
+  delayMicroseconds(1500);
   }
 }
 
