@@ -38,8 +38,246 @@ namespace Arduino_Controller
             controllsAfterStart();
             getAvailablePorts();
             qualityComboboxInit();
+        }        
+
+        private void makeSnapshot_Click(object sender, EventArgs eventArgs)
+        {
+            Bitmap bmp = videoSourcePlayer.GetCurrentVideoFrame();
+            pictureBox.Image = bmp;
+        }       
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            connectToArduino();
+            connectCamera();
+            controllsAfterConnection();
         }
 
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            disconnectArduino();
+            disconnectCamera();
+            controllsAfterStart();
+        }    
+        
+        private void qualityComboboxInit()
+        {
+            string[] quality = {"5", "10", "15", "20", "25" };
+            foreach (string possibility in quality)
+            {
+                qualitySelectComboBox.Items.Add(possibility);
+            }
+        }
+
+        private void qualitySelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {      
+            int selectedQuality = qualitySelectComboBox.SelectedIndex;            
+            qualitySelect(selectedQuality);
+            controllsReadyToStartImaging();
+        }
+
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            startCycle();            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (FilterInfo filterInfo in filterInfoCollection)
+            {
+                camBox.Items.Add(filterInfo.Name);
+            }
+
+            camBox.SelectedIndex = 0;
+            Console.WriteLine("Video devices found");
+        }        
+
+        private void folderBrowsingButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog browserDialog = new FolderBrowserDialog();
+            if(browserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                rootImageFolderPath = browserDialog.SelectedPath;                
+            }
+        }
+
+        //Vytvori novou slozku ve zvolenem lokaci 
+        private void createFolder()
+        {
+            folderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
+            Console.WriteLine(folderPath);
+            Directory.CreateDirectory(folderPath);
+        }
+
+        //Zacne cyklus porizovani snimku a otaceni kraslice. Musi byt specifikovane misto pro ukladani snimku a inventarni cislo kraslice
+        private async void startCycle()
+        {
+            if (inventoryNumber.Text != "" & folderPath != "")
+            {
+                createFolder();
+
+                commandString = "CLK00";
+                string message = makeMessage();
+                int runs = 1600 / int.Parse(numberOfSteps);
+                controllsDuringImaging();
+
+                int imageNumber = 1;
+                for (int n = 0; n < runs; n++)
+                {
+                    takeSnapshot(imageNumber);
+                    imageNumber++;
+
+                    await Task.Delay(1000);
+                    port.WriteLine(message);
+
+
+                    string answer = port.ReadLine();
+
+                    if (answer == makeDoneMessage())
+                    {
+                        connectedCheckBox.Checked = true;
+                        Console.WriteLine(answer);
+                        await Task.Delay(1000);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Step failed");
+                    }
+                }
+                controllsReadyToStartImaging();
+            }
+            else
+            {
+                MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
+            }
+        }
+
+        //Volba poctu snimku porizenych behem jednoho cyklu
+        private void qualitySelect(int quality)
+        {
+            switch (quality)
+            {
+                case 0:
+                    numberOfSteps = "320";
+                    break;
+                case 1:
+                    numberOfSteps = "160";
+                    break;
+                case 2:
+                    numberOfSteps = "106";
+                    break;
+                case 3:
+                    numberOfSteps = "080";
+                    break;
+                case 4:
+                    numberOfSteps = "064";
+                    break;
+            }
+
+            Console.WriteLine(numberOfSteps);
+        }
+
+        //Metoda sklada zpravy, ktere jsou posilany pomoci seriove komunikace Arduinu
+        private string makeMessage()
+        {
+            string message = commandString + "/" + numberOfSteps + "\n";
+            Console.WriteLine(message);
+            return message;
+        }
+
+        //Sklada zpravy, ktere by mely prijit po seriove komunikaci z Arduina, slouzi pro overeni, ze Arduino splnilo pozadavek
+        private string makeDoneMessage()
+        {
+            string message = commandString + "/" + numberOfSteps + "/DONE";
+            return message;
+        }
+
+        //Metoda zaznamena obsazene COM porty
+        private void getAvailablePorts()
+        {
+            ports = SerialPort.GetPortNames();
+
+            foreach (string port in ports)
+            {
+                serialPorts.Items.Add(port);
+                Console.WriteLine(port);
+                if (ports[0] != null)
+                {
+                    serialPorts.SelectedItem = ports[0];
+                }
+            }
+        }
+
+        //Metoda poridi snimek a ulozi ho do zvolene slozky
+        private void takeSnapshot(int imageNumber)
+        {
+            Console.WriteLine("Snapshot taken");
+            Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
+            pictureBox.Image = snapshot;
+            string path = folderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
+            snapshot.Save(path);
+        }
+
+        //Povolene prvky UI po pripojeni k webce a Arduinu
+        private void controllsAfterConnection()
+        {
+            serialPorts.Enabled = false;
+            camBox.Enabled = false;
+            connectButton.Enabled = false;
+            StartButton.Enabled = false;
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
+
+            disconnectButton.Enabled = true;
+            makeSnapshot.Enabled = true;
+            qualitySelectComboBox.Enabled = true;
+        }
+
+        //Povolene prvky UI po spusteni aplikace
+        private void controllsAfterStart()
+        {
+            disconnectButton.Enabled = false;
+            makeSnapshot.Enabled = false;
+            qualitySelectComboBox.Enabled = false;
+            StartButton.Enabled = false;
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
+
+            connectButton.Enabled = true;
+            camBox.Enabled = true;
+            serialPorts.Enabled = true;
+        }
+
+        //Povolene prvky UI behem cyklu pozirovani snimku
+        private void controllsDuringImaging()
+        {
+            disconnectButton.Enabled = false;
+            makeSnapshot.Enabled = false;
+            qualitySelectComboBox.Enabled = false;
+            StartButton.Enabled = false;
+            connectButton.Enabled = false;
+            camBox.Enabled = false;
+            serialPorts.Enabled = false;
+            folderBrowsingButton.Enabled = false;
+            inventoryNumber.Enabled = false;
+        }
+        //Povolene prvky UI po nastaveni vsech parametru
+        private void controllsReadyToStartImaging()
+        {
+            serialPorts.Enabled = false;
+            camBox.Enabled = false;
+            connectButton.Enabled = false;
+
+            folderBrowsingButton.Enabled = true;
+            inventoryNumber.Enabled = true;
+            StartButton.Enabled = true;
+            disconnectButton.Enabled = true;
+            makeSnapshot.Enabled = true;
+            qualitySelectComboBox.Enabled = true;
+        }
+
+        //Pripojeni k Arduinu
         private async void connectToArduino()
         {
             string selectedPort = serialPorts.GetItemText(serialPorts.SelectedItem);
@@ -50,12 +288,12 @@ namespace Arduino_Controller
             port.DataBits = 8;
             try
             {
-                port.Open();                
+                port.Open();
 
                 commandString = "START";
                 string message = makeMessage();
                 Console.WriteLine("APP:  " + message);
-                port.WriteLine(message);                
+                port.WriteLine(message);
 
                 await Task.Delay(1000);
 
@@ -76,8 +314,9 @@ namespace Arduino_Controller
             catch { }
         }
 
+        //Pripojeni k webce
         private void connectCamera()
-        {         
+        {
             videoCaptureDevice = new VideoCaptureDevice(filterInfoCollection[camBox.SelectedIndex].MonikerString);
             videoCaptureDevice.ProvideSnapshots = true;
 
@@ -101,6 +340,7 @@ namespace Arduino_Controller
             Console.WriteLine("Camera connected");
         }
 
+        //Odpojeni od webky
         private void disconnectCamera()
         {
             videoSourcePlayer.SignalToStop();
@@ -110,6 +350,7 @@ namespace Arduino_Controller
             Console.WriteLine("Camera disconnected");
         }
 
+        //odpojeni od Arduina
         private void disconnectArduino()
         {
             port.Close();
@@ -118,242 +359,6 @@ namespace Arduino_Controller
             Console.WriteLine("Arduino disconnected");
         }
 
-        private void makeSnapshot_Click(object sender, EventArgs eventArgs)
-        {
-            Bitmap bmp = videoSourcePlayer.GetCurrentVideoFrame();
-            pictureBox.Image = bmp;
-            //string path = imageFolderPath + "/" + imageName.ToString() + ".jpg";
-            //bmp.Save(path);
-            //imageName++;
-        }
-
-        private void takeSnapshot(int imageNumber)
-        {
-            Console.WriteLine("Snapshot taken");
-            Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
-            pictureBox.Image = snapshot;
-            string path = folderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
-            snapshot.Save(path);
-        }
-
-
-        private void controllsAfterConnection()
-        {            
-            serialPorts.Enabled = false;
-            camBox.Enabled = false;
-            connectButton.Enabled = false;
-            StartButton.Enabled = false;
-            folderBrowsingButton.Enabled = false;
-            inventoryNumber.Enabled = false;
-
-            disconnectButton.Enabled = true;
-            makeSnapshot.Enabled = true;
-            qualitySelectComboBox.Enabled = true;
-        }
-
-        private void controllsAfterStart()
-        {
-            disconnectButton.Enabled = false;
-            makeSnapshot.Enabled = false;
-            qualitySelectComboBox.Enabled = false;
-            StartButton.Enabled = false;
-            folderBrowsingButton.Enabled = false;
-            inventoryNumber.Enabled = false;
-
-            connectButton.Enabled = true;
-            camBox.Enabled = true;
-            serialPorts.Enabled = true;
-        }
-
-        private void controllsDuringImaging()
-        {
-            disconnectButton.Enabled = false;
-            makeSnapshot.Enabled = false;
-            qualitySelectComboBox.Enabled = false;
-            StartButton.Enabled = false;
-            connectButton.Enabled = false;
-            camBox.Enabled = false;
-            serialPorts.Enabled = false;
-            folderBrowsingButton.Enabled = false;
-            inventoryNumber.Enabled = false;
-        }
-        private void controllsReadyToStartImaging()
-        {
-            serialPorts.Enabled = false;
-            camBox.Enabled = false;
-            connectButton.Enabled = false;
-
-            folderBrowsingButton.Enabled = true;
-            inventoryNumber.Enabled = true;
-            StartButton.Enabled = true;
-            disconnectButton.Enabled = true;
-            makeSnapshot.Enabled = true;
-            qualitySelectComboBox.Enabled = true;
-        }
-
-        void getAvailablePorts()
-        {
-            ports = SerialPort.GetPortNames();
-
-            foreach (string port in ports)
-            {
-                serialPorts.Items.Add(port);
-                Console.WriteLine(port);
-                if (ports[0] != null)
-                {
-                    serialPorts.SelectedItem = ports[0];
-                }
-            }
-        }
-
-        private void connectButton_Click(object sender, EventArgs e)
-        {
-            connectToArduino();
-            connectCamera();
-            controllsAfterConnection();
-        }
-
-        private void disconnectButton_Click(object sender, EventArgs e)
-        {
-            disconnectArduino();
-            disconnectCamera();
-            controllsAfterStart();
-        }        
-        
-        private void qualitySelect(int quality)
-        {       
-            switch (quality)
-            {
-                case 0:
-                    numberOfSteps = "320"; 
-                    break;
-                case 1:
-                    numberOfSteps = "160";
-                    break;
-                case 2:
-                    numberOfSteps = "106";
-                    break;
-                case 3:
-                    numberOfSteps = "080";
-                    break;
-                case 4:
-                    numberOfSteps = "064";
-                    break;
-            }
-
-            Console.WriteLine(numberOfSteps);
-        }
-
-        private string makeMessage()
-        {
-            string message = commandString + "/" + numberOfSteps + "\n";
-            Console.WriteLine(message);
-            return message;
-        }
-
-        private string makeDoneMessage()
-        {
-            string message = commandString + "/" + numberOfSteps + "/DONE";
-            return message;
-        }
-        private void qualityComboboxInit()
-        {
-            string[] quality = {"5", "10", "15", "20", "25" };
-            foreach (string possibility in quality)
-            {
-                qualitySelectComboBox.Items.Add(possibility);
-            }
-        }
-
-        private void qualitySelectComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {      
-            int selectedQuality = qualitySelectComboBox.SelectedIndex;            
-            qualitySelect(selectedQuality);
-            controllsReadyToStartImaging();
-        }
-        //private void snapshotResolutionComBox_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if(qualitySelectComboBox.SelectedIndex == 0)
-        //    {
-        //        
-        //        videoCapabilities = videoCaptureDevice.VideoCapabilities;
-        //        snapshotCapabilities = videoCaptureDevice.SnapshotCapabilities;
-        //
-        //        videoCaptureDevice.SnapshotResolution = snapshotCapabilities[snapshotResolutionComBox.SelectedIndex];
-        //        videoCaptureDevice.VideoResolution = videoCapabilities[snapshotResolutionComBox.SelectedIndex];
-        //    }
-        //
-        //}
-
-        private async void StartButton_Click(object sender, EventArgs e)
-        {
-            if(inventoryNumber.Text != "" & folderPath != ""){
-                createFolder();
-
-                commandString = "CLK00";
-                string message = makeMessage();
-                int runs = 1600 / int.Parse(numberOfSteps);
-                controllsDuringImaging();
-
-                int imageNumber = 1;
-                for (int n = 0; n < runs; n++)
-                {
-                    takeSnapshot(imageNumber);
-                    imageNumber++;
-
-                    await Task.Delay(1000);
-                    port.WriteLine(message);
-
-                
-                    string answer = port.ReadLine();
-
-                    if (answer == makeDoneMessage())
-                    {
-                        connectedCheckBox.Checked = true;
-                        Console.WriteLine(answer);
-                        await Task.Delay(1000);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Step failed");
-                    }
-                }
-                controllsReadyToStartImaging();
-            }
-            else
-            {
-                MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
-            }
-            
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            foreach (FilterInfo filterInfo in filterInfoCollection)
-            {
-                camBox.Items.Add(filterInfo.Name);
-            }
-
-            camBox.SelectedIndex = 0;
-            Console.WriteLine("Video devices found");
-        }
-
-        private void createFolder()
-        {
-            folderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
-            Console.WriteLine(folderPath);
-            Directory.CreateDirectory(folderPath);
-        }
-
-        private void folderBrowsingButton_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog browserDialog = new FolderBrowserDialog();
-            if(browserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                rootImageFolderPath = browserDialog.SelectedPath;                
-            }
-        }
     }
 }
 
