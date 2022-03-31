@@ -41,26 +41,11 @@ void parseMessage(String stringToParse){
     String answer = stringToParse + "/DONE\n";
     Serial.print(answer);
   }
-    
   else if(commandString == "CLK00"){
     commandCLK00(stepsInt);
     String answer = stringToParse + "/DONE\n";
-    Serial.print(answer); 
-    
+    Serial.print(answer);    
   }
-  
-  else if(commandString == "CTCLK"){
-    commandCTCLK(stepsInt);
-    String answer = stringToParse + "/DONE\n";
-    Serial.print(answer); 
-  }
-  
-  else if(commandString == "HOME0"){
-
-    String answer = stringToParse + "/DONE\n";
-    Serial.print(answer); 
-  }
-  
   else{
     //Serial.println("Unknown command");
   }
@@ -70,21 +55,13 @@ void parseMessage(String stringToParse){
 void startCommand(){
   for(int i = 0; i <1600; i++){
   digitalWrite(STEP, HIGH);
-  delayMicroseconds(1000);
+  delayMicroseconds(1500);
   digitalWrite(STEP, LOW);
-  delayMicroseconds(1000);
+  delayMicroseconds(1500);
  }
 }
 
 void commandCLK00(int steps){
-  for(int n = 0; n < steps; n++){
-  digitalWrite(STEP, HIGH);
-  delayMicroseconds(1500);
-  digitalWrite(STEP, LOW);
-  delayMicroseconds(1500);
-  }
-}
-void commandCTCLK(int steps){
   for(int n = 0; n < steps; n++){
   digitalWrite(STEP, HIGH);
   delayMicroseconds(1500);

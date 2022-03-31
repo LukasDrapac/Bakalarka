@@ -8,22 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
-using System.Threading;
 using System.IO;
-using AForge;
-using AForge.Video;
 using AForge.Video.DirectShow;
 
 namespace Arduino_Controller
 {
     public partial class Form1 : Form
-    {
+    {        
         String[] ports;
-        SerialPort port;
 
         string rootImageFolderPath;
         string folderPath;
-        string commandString;
         string numberOfSteps;
 
         FilterInfoCollection filterInfoCollection;
@@ -31,13 +26,14 @@ namespace Arduino_Controller
         private VideoCapabilities[] videoCapabilities;
         private VideoCapabilities[] snapshotCapabilities;
 
+        Arduino_Communication arduinoComm = new Arduino_Communication();
 
         public Form1()
         {
             InitializeComponent();
             controllsAfterStart();
-            getAvailablePorts();
-            qualityComboboxInit();
+            initSerialPortsComboBox();
+            qualityComboboxInit();            
         }        
 
         private void makeSnapshot_Click(object sender, EventArgs eventArgs)
@@ -48,14 +44,15 @@ namespace Arduino_Controller
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            connectToArduino();
+            string selectedPort = serialPorts.GetItemText(serialPorts.SelectedItem);
+            arduinoComm.connectToArduino(selectedPort);
             connectCamera();
             controllsAfterConnection();
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)
-        {
-            disconnectArduino();
+        {   
+            arduinoComm.disconnectArduino();
             disconnectCamera();
             controllsAfterStart();
         }    
@@ -116,35 +113,20 @@ namespace Arduino_Controller
             if (inventoryNumber.Text != "" & folderPath != "")
             {
                 createFolder();
-
-                commandString = "CLK00";
-                string message = makeMessage();
                 int runs = 1600 / int.Parse(numberOfSteps);
                 controllsDuringImaging();
 
                 int imageNumber = 1;
                 for (int n = 0; n < runs; n++)
                 {
+                    Task task = arduinoComm.makeStep(int.Parse(numberOfSteps));
+                    await task;
+                    await Task.Delay(500);
                     takeSnapshot(imageNumber);
                     imageNumber++;
-
-                    await Task.Delay(1000);
-                    port.WriteLine(message);
-
-
-                    string answer = port.ReadLine();
-
-                    if (answer == makeDoneMessage())
-                    {
-                        connectedCheckBox.Checked = true;
-                        Console.WriteLine(answer);
-                        await Task.Delay(1000);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Step failed");
-                    }
+                       
                 }
+                Console.WriteLine("Cycle finished succesfully");
                 controllsReadyToStartImaging();
             }
             else
@@ -176,28 +158,13 @@ namespace Arduino_Controller
             }
 
             Console.WriteLine(numberOfSteps);
-        }
+        }       
 
-        //Metoda sklada zpravy, ktere jsou posilany pomoci seriove komunikace Arduinu
-        private string makeMessage()
+        //Metoda zaznamena obsazene COM porty do ComboBoxu
+        private void initSerialPortsComboBox()
         {
-            string message = commandString + "/" + numberOfSteps + "\n";
-            Console.WriteLine(message);
-            return message;
-        }
-
-        //Sklada zpravy, ktere by mely prijit po seriove komunikaci z Arduina, slouzi pro overeni, ze Arduino splnilo pozadavek
-        private string makeDoneMessage()
-        {
-            string message = commandString + "/" + numberOfSteps + "/DONE";
-            return message;
-        }
-
-        //Metoda zaznamena obsazene COM porty
-        private void getAvailablePorts()
-        {
-            ports = SerialPort.GetPortNames();
-
+            ports = arduinoComm.getAvailablePorts();
+            Console.WriteLine(ports);
             foreach (string port in ports)
             {
                 serialPorts.Items.Add(port);
@@ -275,44 +242,7 @@ namespace Arduino_Controller
             disconnectButton.Enabled = true;
             makeSnapshot.Enabled = true;
             qualitySelectComboBox.Enabled = true;
-        }
-
-        //Pripojeni k Arduinu
-        private async void connectToArduino()
-        {
-            string selectedPort = serialPorts.GetItemText(serialPorts.SelectedItem);
-            port = new SerialPort(selectedPort);
-            port.BaudRate = 9600;
-            port.Parity = Parity.None;
-            port.StopBits = StopBits.One;
-            port.DataBits = 8;
-            try
-            {
-                port.Open();
-
-                commandString = "START";
-                string message = makeMessage();
-                Console.WriteLine("APP:  " + message);
-                port.WriteLine(message);
-
-                await Task.Delay(1000);
-
-                string answer = port.ReadLine();
-                Console.WriteLine("Arduino:  " + answer);
-
-                if (answer == makeDoneMessage())
-                {
-                    connectedCheckBox.Checked = true;
-                    Console.WriteLine("Connected!");
-                }
-                else
-                {
-                    disconnectArduino();
-                    Console.WriteLine("Not Connected");
-                }
-            }
-            catch { }
-        }
+        }       
 
         //Pripojeni k webce
         private void connectCamera()
@@ -320,20 +250,12 @@ namespace Arduino_Controller
             videoCaptureDevice = new VideoCaptureDevice(filterInfoCollection[camBox.SelectedIndex].MonikerString);
             videoCaptureDevice.ProvideSnapshots = true;
 
-            snapshotCapabilities = videoCaptureDevice.SnapshotCapabilities;
-            videoCapabilities = videoCaptureDevice.VideoCapabilities;
-
-            //foreach(VideoCapabilities info in snapshotCapabilities)
-            //{
-            //    snapshotResolutionComBox.Items.Add(info.FrameSize);
-            //}
-
             videoCapabilities = videoCaptureDevice.VideoCapabilities;
             snapshotCapabilities = videoCaptureDevice.SnapshotCapabilities;
 
-            videoCaptureDevice.SnapshotResolution = snapshotCapabilities[0];
-            videoCaptureDevice.VideoResolution = videoCapabilities[0];
-
+            //videoCaptureDevice.SnapshotResolution = snapshotCapabilities[0];
+            //videoCaptureDevice.VideoResolution = videoCapabilities[0];
+            //
             videoSourcePlayer.VideoSource = videoCaptureDevice;
             videoSourcePlayer.Start();
             camConnectCheckBox.Checked = true;
@@ -348,17 +270,7 @@ namespace Arduino_Controller
             videoSourcePlayer.VideoSource = null;
             camConnectCheckBox.Checked = false;
             Console.WriteLine("Camera disconnected");
-        }
-
-        //odpojeni od Arduina
-        private void disconnectArduino()
-        {
-            port.Close();
-
-            connectedCheckBox.Enabled = false;
-            Console.WriteLine("Arduino disconnected");
-        }
-
+        } 
     }
 }
 
