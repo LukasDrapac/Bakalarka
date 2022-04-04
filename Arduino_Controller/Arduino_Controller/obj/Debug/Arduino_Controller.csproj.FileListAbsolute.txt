@@ -85,3 +85,25 @@ C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka\Arduino_Controller\Arduino_
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.CoreCompileInputs.cache
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.exe
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.pdb
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.exe.config
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.exe
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\Arduino_Controller.pdb
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Controls.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Imaging.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Video.DirectShow.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Video.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Math.dll
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Controls.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Imaging.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Video.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Video.DirectShow.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\bin\Debug\AForge.Math.xml
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.AssemblyReference.cache
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.Form1.resources
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.Properties.Resources.resources
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.GenerateResource.cache
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.CoreCompileInputs.cache
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.exe
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.pdb

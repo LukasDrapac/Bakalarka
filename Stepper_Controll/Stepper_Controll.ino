@@ -15,7 +15,7 @@ bool clockwise;
 void setup() { 
 Wire.begin();
 Serial.begin(9600);
-Serial.println("Start the program");
+//Serial.println("Start the program");
 
 pinMode(DIR, OUTPUT);
 pinMode(STEP, OUTPUT);
@@ -25,17 +25,15 @@ incommingMessage = false;
 clockwise = false;
 digitalWrite(DIR, LOW);
 
-if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
-{
-  Serial.println("Sensor failed to begin. Please check wiring. Freezing...");
-  while (1);
-}
-else{
-  Serial.println("Sensor online!");
-}
-distanceSensor.setTimingBudgetInMs(500);
-distanceSensor.setIntermeasurementPeriod(100);
-Serial.println(distanceSensor.getIntermeasurementPeriod());
+//if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
+//{
+//  Serial.println("Sensor failed to begin. Please check wiring. Freezing...");
+//  while (1);
+//}
+
+//distanceSensor.setTimingBudgetInMs(500);
+//distanceSensor.setIntermeasurementPeriod(100);
+//Serial.println(distanceSensor.getIntermeasurementPeriod());
 }
 
 void loop() {
@@ -66,7 +64,7 @@ void parseMessage(String stringToParse){
     Serial.print(answer);    
   }
   else if(commandString == "MEASR"){
-     int distance = measureDistance();
+     String distance = measureDistance();
      String answer = commandString + "/" + distance + "/DONE\n";
      Serial.print(answer); 
   }
@@ -94,7 +92,7 @@ void commandCLK00(int steps){
   }
 }
 
-int measureDistance(){
+String measureDistance(){
    int distance = 0;
    for(int i = 0; i < 10; i++){
     distanceSensor.startRanging();
@@ -104,12 +102,17 @@ int measureDistance(){
     distance += distanceSensor.getDistance(); //Get the result of the measurement from the sensor
     distanceSensor.clearInterrupt();
     distanceSensor.stopRanging();    
-    //Serial.print(i+1);
-    //Serial.print("Distance(mm): ");
-    //Serial.print(distance);
-    //Serial.println("");
   }
-      return distance / 10;
+  distance = distance / 10;
+  if(distance <= 9){
+    return "00" + String(distance);
+  }
+  else if(distance >= 10 & distance <= 99){
+    return "0" + String(distance);
+  }
+  else{
+    return String(distance);
+  }
 }
 
 void serialEvent() {

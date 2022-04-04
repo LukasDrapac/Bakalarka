@@ -13,13 +13,10 @@ namespace Arduino_Controller
         private String[] serialPorts;
         SerialPort port;
 
+        int offset;
         string numberOfSteps;
 
-        public void sayHello()
-        {
-            Console.WriteLine("Hello");
-        }
-
+        //Vrati pole zapojenych COM portu
         public string[] getAvailablePorts()
         {
             serialPorts = SerialPort.GetPortNames();
@@ -40,9 +37,8 @@ namespace Arduino_Controller
                 port.Open();
 
                 string commandString = "START";
-                int numberOfSteps = 000;
+                string numberOfSteps = "000";
                 string message = makeMessage(commandString, numberOfSteps);
-                Console.WriteLine(message);
                 port.WriteLine(message);
 
                 await Task.Delay(1000);
@@ -58,6 +54,8 @@ namespace Arduino_Controller
                 {                    
                     Console.WriteLine("Not Connected");                    
                 }
+
+                //offset = measureHeight();
             }
             catch { }
         }
@@ -70,7 +68,7 @@ namespace Arduino_Controller
         }
 
         //Zacne cyklus porizovani snimku a otaceni kraslice. Musi byt specifikovane misto pro ukladani snimku a inventarni cislo kraslice
-        public async Task makeStep(int steps)
+        public async Task makeStep(string steps)
         {
             string commandString = "CLK00";
             string command = makeMessage(commandString, steps);
@@ -90,16 +88,29 @@ namespace Arduino_Controller
                         
         }
 
+        public int measureHeight()
+        {
+            string commandString = "MEASR";
+            string command = makeMessage(commandString, "000");
+
+            port.WriteLine(command);
+            string answer = port.ReadLine();
+            Console.WriteLine(answer);
+            int distance = int.Parse(answer.Substring(answer.IndexOf("/") + 1, 3));
+            //Console.WriteLine(distance);
+            return distance;
+        }
+
         //Metoda sklada zpravy, ktere jsou posilany pomoci seriove komunikace Arduinu
-        private string makeMessage(string commandString, int steps)
+        private string makeMessage(string commandString, string steps)
         {
             string message = commandString + "/" + steps + "\n";
-            Console.WriteLine(message);
+            Console.Write(message);
             return message;
         }
 
         //Sklada zpravy, ktere by mely prijit po seriove komunikaci z Arduina, slouzi pro overeni, ze Arduino splnilo pozadavek
-        private string makeDoneMessage(string commandString, int steps)
+        private string makeDoneMessage(string commandString, string steps)
         {
             string message = commandString + "/" + steps + "/DONE";
             return message;

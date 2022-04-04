@@ -27,7 +27,7 @@ namespace Arduino_Controller
         private VideoCapabilities[] snapshotCapabilities;
 
         Arduino_Communication arduinoComm = new Arduino_Communication();
-
+        Process_Image processImage = new Process_Image();
         public Form1()
         {
             InitializeComponent();
@@ -36,27 +36,38 @@ namespace Arduino_Controller
             qualityComboboxInit();            
         }        
 
+        //Manualni porizeni snimku
         private void makeSnapshot_Click(object sender, EventArgs eventArgs)
         {
             Bitmap bmp = videoSourcePlayer.GetCurrentVideoFrame();
             pictureBox.Image = bmp;
         }       
 
+        //Pripojeni k Arduinu a webkamere
         private void connectButton_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Ujistěte se, že v přípravku není vložena kraslice.");
             string selectedPort = serialPorts.GetItemText(serialPorts.SelectedItem);
             arduinoComm.connectToArduino(selectedPort);
             connectCamera();
             controllsAfterConnection();
         }
 
+        //Odpojeni Arduina a webkamery
         private void disconnectButton_Click(object sender, EventArgs e)
         {   
             arduinoComm.disconnectArduino();
             disconnectCamera();
             controllsAfterStart();
-        }    
+        }
         
+        //Spusti zmereni vysky kraslice
+        private void measureButton_Click(object sender, EventArgs e)
+        {
+            arduinoComm.measureHeight();
+        }
+
+        //Inicializace ComboBoxu s vyberem poctu snimku
         private void qualityComboboxInit()
         {
             string[] quality = {"5", "10", "15", "20", "25" };
@@ -73,6 +84,7 @@ namespace Arduino_Controller
             controllsReadyToStartImaging();
         }
 
+        //Spusteni cyklu porizovani snimku
         private void StartButton_Click(object sender, EventArgs e)
         {
             startCycle();            
@@ -95,6 +107,7 @@ namespace Arduino_Controller
             FolderBrowserDialog browserDialog = new FolderBrowserDialog();
             if(browserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                processImage.setRootFoldePath(browserDialog.SelectedPath);
                 rootImageFolderPath = browserDialog.SelectedPath;                
             }
         }
@@ -105,6 +118,7 @@ namespace Arduino_Controller
             folderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
             Console.WriteLine(folderPath);
             Directory.CreateDirectory(folderPath);
+            processImage.setCurrentFolderPath(folderPath);
         }
 
         //Zacne cyklus porizovani snimku a otaceni kraslice. Musi byt specifikovane misto pro ukladani snimku a inventarni cislo kraslice
@@ -119,7 +133,7 @@ namespace Arduino_Controller
                 int imageNumber = 1;
                 for (int n = 0; n < runs; n++)
                 {
-                    Task task = arduinoComm.makeStep(int.Parse(numberOfSteps));
+                    Task task = arduinoComm.makeStep(numberOfSteps);
                     await task;
                     await Task.Delay(500);
                     takeSnapshot(imageNumber);
@@ -133,6 +147,8 @@ namespace Arduino_Controller
             {
                 MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
             }
+            Console.WriteLine(folderPath);
+            pictureBox.Image = processImage.procesImage(folderPath, inventoryNumber.Text);
         }
 
         //Volba poctu snimku porizenych behem jednoho cyklu
@@ -270,7 +286,7 @@ namespace Arduino_Controller
             videoSourcePlayer.VideoSource = null;
             camConnectCheckBox.Checked = false;
             Console.WriteLine("Camera disconnected");
-        } 
+        }
     }
 }
 
