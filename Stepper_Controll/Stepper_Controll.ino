@@ -25,15 +25,15 @@ incommingMessage = false;
 clockwise = false;
 digitalWrite(DIR, LOW);
 
-//if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
-//{
-//  Serial.println("Sensor failed to begin. Please check wiring. Freezing...");
-//  while (1);
-//}
+if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
+{
+  Serial.println("Sensor failed to begin. Please check wiring. Freezing...");
+  while (1);
+}
 
-//distanceSensor.setTimingBudgetInMs(500);
-//distanceSensor.setIntermeasurementPeriod(100);
-//Serial.println(distanceSensor.getIntermeasurementPeriod());
+distanceSensor.setTimingBudgetInMs(500);
+distanceSensor.setIntermeasurementPeriod(100);
+Serial.println(distanceSensor.getIntermeasurementPeriod());
 }
 
 void loop() {
@@ -94,24 +94,27 @@ void commandCLK00(int steps){
 
 String measureDistance(){
    int distance = 0;
-   for(int i = 0; i < 10; i++){
+   int total = 0;
+   for(int i = 0; i < 20; i++){
     distanceSensor.startRanging();
     while (!distanceSensor.checkForDataReady()){
       delay(1);
     }
-    distance += distanceSensor.getDistance(); //Get the result of the measurement from the sensor
+    distance = distanceSensor.getDistance(); //Get the result of the measurement from the sensor
+    total += distance;
+    Serial.println(distance); 
     distanceSensor.clearInterrupt();
     distanceSensor.stopRanging();    
   }
-  distance = distance / 10;
-  if(distance <= 9){
-    return "00" + String(distance);
+  total = total / 20;
+  if(total <= 9){
+    return "00" + String(total);
   }
-  else if(distance >= 10 & distance <= 99){
-    return "0" + String(distance);
+  else if(total >= 10 & total <= 99){
+    return "0" + String(total);
   }
   else{
-    return String(distance);
+    return String(total);
   }
 }
 

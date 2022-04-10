@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
 using AForge.Video.DirectShow;
+using System.Diagnostics;
 
 namespace Arduino_Controller
 {
@@ -18,7 +19,7 @@ namespace Arduino_Controller
         String[] ports;
 
         string rootImageFolderPath;
-        string folderPath;
+        string currentFolderPath;
         string numberOfSteps;
 
         FilterInfoCollection filterInfoCollection;
@@ -64,7 +65,38 @@ namespace Arduino_Controller
         //Spusti zmereni vysky kraslice
         private void measureButton_Click(object sender, EventArgs e)
         {
-            arduinoComm.measureHeight();
+            //arduinoComm.measureHeight();
+
+            var proc1 = new ProcessStartInfo();
+            proc1.WorkingDirectory = @"C:/Users/drapa/OneDrive/Plocha/Test";
+            proc1.Verb = "runas";
+            proc1.Arguments = "-jar processing-py.jar mouse_follow.py";
+            proc1.FileName = "java";
+
+
+            Process.Start(proc1);
+            
+            
+            //var psi = new ProcessStartInfo();
+            //psi.FileName = @"C:/Python27/python.exe";
+            //
+            //var script = @"C:/Users/drapa/PycharmProjects/VPython/main.py";
+            //psi.Arguments = $"\"{script}";
+            //
+            //psi.UseShellExecute = false;
+            //psi.CreateNoWindow = true;
+            //psi.RedirectStandardOutput = true;
+            //psi.RedirectStandardError = true;
+            //
+            //var results = "";
+            //
+            //using (var process = Process.Start(psi))
+            //{
+            //    //results = process.StandardOutput.ReadToEnd();
+            //}
+            //
+            //Console.WriteLine("Results:");
+            //Console.WriteLine(results);
         }
 
         //Inicializace ComboBoxu s vyberem poctu snimku
@@ -107,7 +139,6 @@ namespace Arduino_Controller
             FolderBrowserDialog browserDialog = new FolderBrowserDialog();
             if(browserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                processImage.setRootFoldePath(browserDialog.SelectedPath);
                 rootImageFolderPath = browserDialog.SelectedPath;                
             }
         }
@@ -115,16 +146,15 @@ namespace Arduino_Controller
         //Vytvori novou slozku ve zvolenem lokaci 
         private void createFolder()
         {
-            folderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
-            Console.WriteLine(folderPath);
-            Directory.CreateDirectory(folderPath);
-            processImage.setCurrentFolderPath(folderPath);
+            currentFolderPath = Path.Combine(rootImageFolderPath, inventoryNumber.Text);
+            Console.WriteLine(currentFolderPath);
+            Directory.CreateDirectory(currentFolderPath);
         }
 
         //Zacne cyklus porizovani snimku a otaceni kraslice. Musi byt specifikovane misto pro ukladani snimku a inventarni cislo kraslice
         private async void startCycle()
         {
-            if (inventoryNumber.Text != "" & folderPath != "")
+            if (inventoryNumber.Text != "" & currentFolderPath != "")
             {
                 createFolder();
                 int runs = 1600 / int.Parse(numberOfSteps);
@@ -147,8 +177,8 @@ namespace Arduino_Controller
             {
                 MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
             }
-            Console.WriteLine(folderPath);
-            pictureBox.Image = processImage.procesImage(folderPath, inventoryNumber.Text);
+            Console.WriteLine(currentFolderPath);
+            pictureBox.Image = processImage.procesImage(currentFolderPath, inventoryNumber.Text);
         }
 
         //Volba poctu snimku porizenych behem jednoho cyklu
@@ -198,7 +228,7 @@ namespace Arduino_Controller
             Console.WriteLine("Snapshot taken");
             Bitmap snapshot = videoSourcePlayer.GetCurrentVideoFrame();
             pictureBox.Image = snapshot;
-            string path = folderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
+            string path = currentFolderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
             snapshot.Save(path);
         }
 
@@ -286,6 +316,13 @@ namespace Arduino_Controller
             videoSourcePlayer.VideoSource = null;
             camConnectCheckBox.Checked = false;
             Console.WriteLine("Camera disconnected");
+        }
+
+        private void openGaleryButton_Click(object sender, EventArgs e)
+        {
+            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Images";
+            galeryForm galery = new galeryForm(testingPath);
+            galery.Show();
         }
     }
 }

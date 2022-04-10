@@ -107,3 +107,4 @@ C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Ardu
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.csproj.CoreCompileInputs.cache
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.exe
 C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.pdb
+C:\Users\drapa\OneDrive\Plocha\Bakalářka\Bakalarka 2.0\Arduino_Controller\Arduino_Controller\obj\Debug\Arduino_Controller.galeryForm.resources

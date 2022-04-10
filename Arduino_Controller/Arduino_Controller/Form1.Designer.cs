@@ -48,36 +48,34 @@ namespace Arduino_Controller
             this.folderBrowsingButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.measureButton = new System.Windows.Forms.Button();
+            this.openGaleryButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPorts
             // 
             this.serialPorts.FormattingEnabled = true;
-            this.serialPorts.Location = new System.Drawing.Point(25, 540);
-            this.serialPorts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.serialPorts.Location = new System.Drawing.Point(19, 439);
             this.serialPorts.Name = "serialPorts";
-            this.serialPorts.Size = new System.Drawing.Size(160, 24);
+            this.serialPorts.Size = new System.Drawing.Size(121, 21);
             this.serialPorts.TabIndex = 2;
             // 
             // connectedCheckBox
             // 
             this.connectedCheckBox.AutoSize = true;
             this.connectedCheckBox.Enabled = false;
-            this.connectedCheckBox.Location = new System.Drawing.Point(205, 544);
-            this.connectedCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.connectedCheckBox.Location = new System.Drawing.Point(154, 442);
             this.connectedCheckBox.Name = "connectedCheckBox";
-            this.connectedCheckBox.Size = new System.Drawing.Size(145, 21);
+            this.connectedCheckBox.Size = new System.Drawing.Size(115, 17);
             this.connectedCheckBox.TabIndex = 3;
             this.connectedCheckBox.Text = "Přípravek připojen";
             this.connectedCheckBox.UseVisualStyleBackColor = true;
             // 
             // connectButton
             // 
-            this.connectButton.Location = new System.Drawing.Point(400, 537);
-            this.connectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.connectButton.Location = new System.Drawing.Point(300, 436);
             this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(100, 28);
+            this.connectButton.Size = new System.Drawing.Size(75, 23);
             this.connectButton.TabIndex = 4;
             this.connectButton.Text = "Připojit";
             this.connectButton.UseVisualStyleBackColor = true;
@@ -85,10 +83,9 @@ namespace Arduino_Controller
             // 
             // disconnectButton
             // 
-            this.disconnectButton.Location = new System.Drawing.Point(400, 583);
-            this.disconnectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.disconnectButton.Location = new System.Drawing.Point(300, 474);
             this.disconnectButton.Name = "disconnectButton";
-            this.disconnectButton.Size = new System.Drawing.Size(100, 28);
+            this.disconnectButton.Size = new System.Drawing.Size(75, 23);
             this.disconnectButton.TabIndex = 5;
             this.disconnectButton.Text = "Odpojit";
             this.disconnectButton.UseVisualStyleBackColor = true;
@@ -96,10 +93,9 @@ namespace Arduino_Controller
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(776, 533);
-            this.StartButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.StartButton.Location = new System.Drawing.Point(582, 433);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(100, 28);
+            this.StartButton.Size = new System.Drawing.Size(75, 23);
             this.StartButton.TabIndex = 6;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = true;
@@ -108,19 +104,18 @@ namespace Arduino_Controller
             // qualitySelectComboBox
             // 
             this.qualitySelectComboBox.FormattingEnabled = true;
-            this.qualitySelectComboBox.Location = new System.Drawing.Point(533, 537);
-            this.qualitySelectComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.qualitySelectComboBox.Location = new System.Drawing.Point(400, 436);
             this.qualitySelectComboBox.Name = "qualitySelectComboBox";
-            this.qualitySelectComboBox.Size = new System.Drawing.Size(160, 24);
+            this.qualitySelectComboBox.Size = new System.Drawing.Size(121, 21);
             this.qualitySelectComboBox.TabIndex = 7;
             this.qualitySelectComboBox.SelectedIndexChanged += new System.EventHandler(this.qualitySelectComboBox_SelectedIndexChanged);
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(15, 10);
-            this.pictureBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pictureBox.Location = new System.Drawing.Point(11, 8);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(765, 462);
+            this.pictureBox.Size = new System.Drawing.Size(574, 375);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 9;
             this.pictureBox.TabStop = false;
@@ -128,20 +123,18 @@ namespace Arduino_Controller
             // camBox
             // 
             this.camBox.FormattingEnabled = true;
-            this.camBox.Location = new System.Drawing.Point(25, 603);
-            this.camBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.camBox.Location = new System.Drawing.Point(19, 490);
             this.camBox.Name = "camBox";
-            this.camBox.Size = new System.Drawing.Size(160, 24);
+            this.camBox.Size = new System.Drawing.Size(121, 21);
             this.camBox.TabIndex = 11;
             // 
             // camConnectCheckBox
             // 
             this.camConnectCheckBox.AutoSize = true;
             this.camConnectCheckBox.Enabled = false;
-            this.camConnectCheckBox.Location = new System.Drawing.Point(205, 606);
-            this.camConnectCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.camConnectCheckBox.Location = new System.Drawing.Point(154, 492);
             this.camConnectCheckBox.Name = "camConnectCheckBox";
-            this.camConnectCheckBox.Size = new System.Drawing.Size(142, 21);
+            this.camConnectCheckBox.Size = new System.Drawing.Size(109, 17);
             this.camConnectCheckBox.TabIndex = 12;
             this.camConnectCheckBox.Text = "Kamera připojena";
             this.camConnectCheckBox.UseVisualStyleBackColor = true;
@@ -149,36 +142,38 @@ namespace Arduino_Controller
             // serialPortsLabel
             // 
             this.serialPortsLabel.AutoSize = true;
-            this.serialPortsLabel.Location = new System.Drawing.Point(25, 517);
+            this.serialPortsLabel.Location = new System.Drawing.Point(19, 420);
+            this.serialPortsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.serialPortsLabel.Name = "serialPortsLabel";
-            this.serialPortsLabel.Size = new System.Drawing.Size(117, 17);
+            this.serialPortsLabel.Size = new System.Drawing.Size(88, 13);
             this.serialPortsLabel.TabIndex = 13;
             this.serialPortsLabel.Text = "Výběr COM portu";
             // 
             // camLabel
             // 
             this.camLabel.AutoSize = true;
-            this.camLabel.Location = new System.Drawing.Point(25, 581);
+            this.camLabel.Location = new System.Drawing.Point(19, 472);
+            this.camLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.camLabel.Name = "camLabel";
-            this.camLabel.Size = new System.Drawing.Size(95, 17);
+            this.camLabel.Size = new System.Drawing.Size(71, 13);
             this.camLabel.TabIndex = 14;
             this.camLabel.Text = "Výběr kamery";
             // 
             // qualitySelectorLabel
             // 
             this.qualitySelectorLabel.AutoSize = true;
-            this.qualitySelectorLabel.Location = new System.Drawing.Point(531, 516);
+            this.qualitySelectorLabel.Location = new System.Drawing.Point(398, 419);
+            this.qualitySelectorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.qualitySelectorLabel.Name = "qualitySelectorLabel";
-            this.qualitySelectorLabel.Size = new System.Drawing.Size(92, 17);
+            this.qualitySelectorLabel.Size = new System.Drawing.Size(73, 13);
             this.qualitySelectorLabel.TabIndex = 15;
             this.qualitySelectorLabel.Text = "Počet snímků";
             // 
             // makeSnapshot
             // 
-            this.makeSnapshot.Location = new System.Drawing.Point(400, 639);
-            this.makeSnapshot.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.makeSnapshot.Location = new System.Drawing.Point(300, 519);
             this.makeSnapshot.Name = "makeSnapshot";
-            this.makeSnapshot.Size = new System.Drawing.Size(100, 28);
+            this.makeSnapshot.Size = new System.Drawing.Size(75, 23);
             this.makeSnapshot.TabIndex = 16;
             this.makeSnapshot.Text = "Test snímku";
             this.makeSnapshot.UseVisualStyleBackColor = true;
@@ -186,37 +181,37 @@ namespace Arduino_Controller
             // 
             // videoSourcePlayer
             // 
-            this.videoSourcePlayer.Location = new System.Drawing.Point(855, 10);
-            this.videoSourcePlayer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.videoSourcePlayer.Location = new System.Drawing.Point(641, 8);
+            this.videoSourcePlayer.Margin = new System.Windows.Forms.Padding(2);
             this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(765, 462);
+            this.videoSourcePlayer.Size = new System.Drawing.Size(574, 375);
             this.videoSourcePlayer.TabIndex = 17;
             this.videoSourcePlayer.Text = "videoSourcePlayer1";
             this.videoSourcePlayer.VideoSource = null;
             // 
             // inventoryNumber
             // 
-            this.inventoryNumber.Location = new System.Drawing.Point(533, 604);
-            this.inventoryNumber.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.inventoryNumber.Location = new System.Drawing.Point(400, 491);
+            this.inventoryNumber.Margin = new System.Windows.Forms.Padding(2);
             this.inventoryNumber.Name = "inventoryNumber";
-            this.inventoryNumber.Size = new System.Drawing.Size(160, 22);
+            this.inventoryNumber.Size = new System.Drawing.Size(121, 20);
             this.inventoryNumber.TabIndex = 20;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(531, 581);
+            this.label2.Location = new System.Drawing.Point(398, 472);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(154, 17);
+            this.label2.Size = new System.Drawing.Size(121, 13);
             this.label2.TabIndex = 21;
             this.label2.Text = "Inventární číslo kraslice";
             // 
             // folderBrowsingButton
             // 
-            this.folderBrowsingButton.Location = new System.Drawing.Point(533, 668);
-            this.folderBrowsingButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.folderBrowsingButton.Location = new System.Drawing.Point(400, 543);
             this.folderBrowsingButton.Name = "folderBrowsingButton";
-            this.folderBrowsingButton.Size = new System.Drawing.Size(117, 28);
+            this.folderBrowsingButton.Size = new System.Drawing.Size(88, 23);
             this.folderBrowsingButton.TabIndex = 22;
             this.folderBrowsingButton.Text = "Uložit do složky";
             this.folderBrowsingButton.UseVisualStyleBackColor = true;
@@ -225,27 +220,40 @@ namespace Arduino_Controller
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(533, 645);
+            this.label1.Location = new System.Drawing.Point(400, 524);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(223, 17);
+            this.label1.Size = new System.Drawing.Size(171, 13);
             this.label1.TabIndex = 23;
             this.label1.Text = "Kořenová složka se snímky kraslic";
             // 
             // measureButton
             // 
-            this.measureButton.Location = new System.Drawing.Point(776, 603);
+            this.measureButton.Location = new System.Drawing.Point(582, 490);
+            this.measureButton.Margin = new System.Windows.Forms.Padding(2);
             this.measureButton.Name = "measureButton";
-            this.measureButton.Size = new System.Drawing.Size(100, 34);
+            this.measureButton.Size = new System.Drawing.Size(75, 28);
             this.measureButton.TabIndex = 24;
             this.measureButton.Text = "Změřit výšku";
             this.measureButton.UseVisualStyleBackColor = true;
             this.measureButton.Click += new System.EventHandler(this.measureButton_Click);
             // 
+            // openGaleryButton
+            // 
+            this.openGaleryButton.Location = new System.Drawing.Point(1055, 473);
+            this.openGaleryButton.Name = "openGaleryButton";
+            this.openGaleryButton.Size = new System.Drawing.Size(75, 23);
+            this.openGaleryButton.TabIndex = 25;
+            this.openGaleryButton.Text = "Galerie";
+            this.openGaleryButton.UseVisualStyleBackColor = true;
+            this.openGaleryButton.Click += new System.EventHandler(this.openGaleryButton_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1635, 719);
+            this.ClientSize = new System.Drawing.Size(1226, 584);
+            this.Controls.Add(this.openGaleryButton);
             this.Controls.Add(this.measureButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.folderBrowsingButton);
@@ -265,10 +273,8 @@ namespace Arduino_Controller
             this.Controls.Add(this.connectButton);
             this.Controls.Add(this.connectedCheckBox);
             this.Controls.Add(this.serialPorts);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
-            this.Text = "Form1";
-            this.TopMost = true;
+            this.Text = "Pořízení snímků";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
@@ -296,6 +302,7 @@ namespace Arduino_Controller
         private System.Windows.Forms.Button folderBrowsingButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button measureButton;
+        private System.Windows.Forms.Button openGaleryButton;
     }
 }
 
