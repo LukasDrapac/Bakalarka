@@ -13,7 +13,14 @@ namespace Arduino_Controller
 {
     public partial class galeryForm : Form
     {
+        int pageLength = 50;
+        int currentPage;
+        int maxPage;
+
         string imagesPath;
+        string[] folders;
+
+        DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
         public galeryForm()
         {
             InitializeComponent();
@@ -26,6 +33,7 @@ namespace Arduino_Controller
             imagesPath = path;
             Console.WriteLine(imagesPath);
             getSubfolders();
+            initPage();
         }
 
         private void gridInit()
@@ -34,13 +42,22 @@ namespace Arduino_Controller
 
             gridView.Columns[0].Name = "Inventární číslo";
             gridView.Columns[1].Name = "Cesta ke složce";
+
+            gridView.Columns.Add(imageColumn);
+            imageColumn.Name = "Úvodní fotka";
+            imageColumn.ImageLayout = DataGridViewImageCellLayout.Stretch;
+
+            gridView.Columns[0].Width = 150;
+            gridView.Columns[1].Width = 150;
+            imageColumn.Width = 210;
+            gridView.RowTemplate.Height = 98;
         }
 
-        private void addDataToGrid(string info)
+        private void AddDataToGrid(string info)
         {
             string[] hodnota = new string[2];
             hodnota[1] = info;
-
+            
             int index = -1;
             for(int i = 0; i < info.Length; i++)
             {
@@ -52,15 +69,73 @@ namespace Arduino_Controller
             }
             hodnota[0] = info.Substring(index + 1);
 
-            gridView.Rows.Add(hodnota);
+            //Image img = Image.FromFile(info + Path.DirectorySeparatorChar + "Processed_Image.jpg");
+
+            gridView.Rows.Add(hodnota[0], hodnota[1]/*, img*/);
+            
         }
+
         private void getSubfolders()
         {
-            string[] folders = Directory.GetDirectories(imagesPath);
-            for(int i = 0; i < folders.Length; i++)
+            folders = Directory.GetDirectories(imagesPath);
+            maxPage = folders.Length / pageLength;
+            currentPage = 1;
+            if(folders.Length % pageLength > 0)
             {
-                Console.WriteLine(folders[i]);
-                addDataToGrid(folders[i]);
+                maxPage++;
+            }            
+        }
+
+        private void initPage()
+        {
+            if(currentPage < maxPage)
+            {
+                for (int i = (currentPage - 1) * 50; i < currentPage * 50; i++)
+                {
+                    //Console.WriteLine(folders[i]);
+                    AddDataToGrid(folders[i]);
+                }
+            }
+            else
+            {
+                for (int i = (currentPage - 1) * 50; i < folders.Length; i++)
+                {
+                    //Console.WriteLine(folders[i]);
+                    AddDataToGrid(folders[i]);
+                }
+            }
+        }
+
+        private void deleteRows() { 
+            foreach(DataGridViewRow row in gridView.Rows)
+            {
+                gridView.Rows.Clear();
+            }
+        }
+
+        private void gridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Console.WriteLine(gridView.CurrentRow);
+            
+        }
+
+        private void previousPage_Click(object sender, EventArgs e)
+        {            
+            if(currentPage > 1)
+            {
+                deleteRows();
+                currentPage--;
+                initPage();
+            }
+        }
+
+        private void nextPage_Click(object sender, EventArgs e)
+        {
+            if(currentPage < maxPage)
+            {
+                deleteRows();
+                currentPage++;
+                initPage();
             }
         }
     }

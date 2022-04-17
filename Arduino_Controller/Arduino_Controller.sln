@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arduino_Controller", "Arduino_Controller\Arduino_Controller.csproj", "{1C73901B-D288-403F-9249-475BE341AFEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArduinoController", "Arduino_Controller\ArduinoController.csproj", "{1C73901B-D288-403F-9249-475BE341AFEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

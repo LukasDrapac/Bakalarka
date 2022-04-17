@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Arduino_Controller
 {
-    class Process_Image
+    class ProcessImage
     {
         private int xPosition = 100;
         private int yPosition = 100;
@@ -21,7 +21,7 @@ namespace Arduino_Controller
         Rectangle cropRectangle;
         Bitmap croppedImage;
 
-        public Bitmap procesImage(string path, string imageName)
+        public Bitmap processImage(string path, string imageName)
         {
             if (croppedImage != null)
             {

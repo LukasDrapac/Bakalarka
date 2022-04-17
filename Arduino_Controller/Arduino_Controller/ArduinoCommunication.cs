@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Arduino_Controller
 {
-    class Arduino_Communication
+    class ArduinoCommunication
     {
         private String[] serialPorts;
         SerialPort port;

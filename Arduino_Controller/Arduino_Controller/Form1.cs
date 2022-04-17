@@ -12,6 +12,7 @@ using System.IO;
 using AForge.Video.DirectShow;
 using System.Diagnostics;
 
+
 namespace Arduino_Controller
 {
     public partial class Form1 : Form
@@ -27,8 +28,8 @@ namespace Arduino_Controller
         private VideoCapabilities[] videoCapabilities;
         private VideoCapabilities[] snapshotCapabilities;
 
-        Arduino_Communication arduinoComm = new Arduino_Communication();
-        Process_Image processImage = new Process_Image();
+        ArduinoCommunication arduinoComm = new ArduinoCommunication();
+        ProcessImage processImage = new ProcessImage();
         public Form1()
         {
             InitializeComponent();
@@ -178,7 +179,7 @@ namespace Arduino_Controller
                 MessageBox.Show("Nebyla zvolena složka se snímky kraslic nebo inventární číslo kraslice");
             }
             Console.WriteLine(currentFolderPath);
-            pictureBox.Image = processImage.procesImage(currentFolderPath, inventoryNumber.Text);
+            pictureBox.Image = processImage.processImage(currentFolderPath, inventoryNumber.Text);
         }
 
         //Volba poctu snimku porizenych behem jednoho cyklu
@@ -230,6 +231,7 @@ namespace Arduino_Controller
             pictureBox.Image = snapshot;
             string path = currentFolderPath + "/" + inventoryNumber.Text + "_" + imageNumber.ToString() + ".jpg";
             snapshot.Save(path);
+            snapshot.Dispose();
         }
 
         //Povolene prvky UI po pripojeni k webce a Arduinu
@@ -320,7 +322,24 @@ namespace Arduino_Controller
 
         private void openGaleryButton_Click(object sender, EventArgs e)
         {
-            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Images";
+            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder";            
+            //string folderName;
+            //for(int i = 1; i <= 326; i++)
+            //{
+            //    if(i < 10)
+            //    {
+            //        folderName = "00" + i;
+            //    }
+            //    else if(i >= 10 && i <= 99)
+            //    {
+            //        folderName = "0" + i;
+            //    }
+            //    else
+            //    {
+            //        folderName = "" + i;
+            //    }
+            //    Directory.CreateDirectory("C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder/KR_" + folderName);
+            //}
             galeryForm galery = new galeryForm(testingPath);
             galery.Show();
         }
