@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace Arduino_Controller
 {
@@ -36,6 +37,7 @@ namespace Arduino_Controller
             initPage();
         }
 
+        //Inicializace parametru DataGridView 
         private void gridInit()
         {
             gridView.ColumnCount = 2;
@@ -53,6 +55,7 @@ namespace Arduino_Controller
             gridView.RowTemplate.Height = 98;
         }
 
+        //Prida radek do DataGridVied
         private void AddDataToGrid(string info)
         {
             string[] hodnota = new string[2];
@@ -69,12 +72,13 @@ namespace Arduino_Controller
             }
             hodnota[0] = info.Substring(index + 1);
 
-            //Image img = Image.FromFile(info + Path.DirectorySeparatorChar + "Processed_Image.jpg");
+            Image img = Image.FromFile(info + Path.DirectorySeparatorChar + "Processed_Image.jpg");
 
-            gridView.Rows.Add(hodnota[0], hodnota[1]/*, img*/);
+            gridView.Rows.Add(hodnota[0], hodnota[1], img);
             
         }
 
+        //Vrati pole slozek v cilovem adresari
         private void getSubfolders()
         {
             folders = Directory.GetDirectories(imagesPath);
@@ -87,6 +91,7 @@ namespace Arduino_Controller
             page.Text = currentPage + " / " + maxPage;
         }
 
+        //Nacteni zanzamu na jednu stranku
         private void initPage()
         {
             if(currentPage < maxPage)
@@ -107,6 +112,7 @@ namespace Arduino_Controller
             }
         }
 
+        //Odstrani vsechny radky v DataGridView
         private void deleteRows() { 
             foreach(DataGridViewRow row in gridView.Rows)
             {
@@ -114,12 +120,7 @@ namespace Arduino_Controller
             }
         }
 
-        private void gridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            Console.WriteLine(gridView.CurrentRow);
-            
-        }
-
+        //Nacteni predchozi stranky
         private void previousPage_Click(object sender, EventArgs e)
         {            
             if(currentPage > 1)
@@ -131,6 +132,7 @@ namespace Arduino_Controller
             }
         }
 
+        //Nacteni dalsi stranky
         private void nextPage_Click(object sender, EventArgs e)
         {
             if(currentPage < maxPage)
@@ -142,6 +144,7 @@ namespace Arduino_Controller
             }
         }
 
+        //Vyfiltruje radky podle stringu
         private void filterButton_Click(object sender, EventArgs e)
         {
             if(filterTextBox.Text != "")
@@ -154,6 +157,20 @@ namespace Arduino_Controller
                     }                    
                 }
             }
+        }
+
+        //Spusti Processing script a preda argument s adresarem kraslice
+        private void runScript_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(gridView.CurrentRow.Cells[1].Value.ToString());
+            string argument = gridView.CurrentRow.Cells[1].Value.ToString();
+            var process = new ProcessStartInfo();
+            process.FileName = @"C:/Users/drapa/OneDrive/Plocha/processing-3.5.4/processing-java.exe";
+            process.Arguments = $"--sketch=C:/Users/drapa/OneDrive/Plocha/ImageProcess --run " + argument + "/Processed_Image.jpg";
+            process.UseShellExecute = false;
+            process.CreateNoWindow = true;
+
+            Process.Start(process);
         }
     }
 }

@@ -66,15 +66,7 @@ namespace Arduino_Controller
         //Spusti zmereni vysky kraslice
         private void measureButton_Click(object sender, EventArgs e)
         {
-            //arduinoComm.measureHeight();
-
-            var process = new ProcessStartInfo();
-            process.FileName = @"C:/Users/drapa/OneDrive/Plocha/processing-3.5.4/processing-java.exe";
-            process.Arguments = $"--sketch=C:/Users/drapa/OneDrive/Plocha/Test2 --run";
-            process.UseShellExecute = false;
-            process.CreateNoWindow = true;
-
-            Process.Start(process);
+            arduinoComm.measureHeight();
         }
 
         //Inicializace ComboBoxu s vyberem poctu snimku
@@ -299,7 +291,7 @@ namespace Arduino_Controller
 
         private void openGaleryButton_Click(object sender, EventArgs e)
         {
-            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder";
+            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Images";
             
             galeryForm galery = new galeryForm(testingPath);
             galery.Show();

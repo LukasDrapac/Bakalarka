@@ -36,6 +36,7 @@ namespace Arduino_Controller
             this.filterButton = new System.Windows.Forms.Button();
             this.filterTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.runScript = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,11 +49,10 @@ namespace Arduino_Controller
             this.gridView.Name = "gridView";
             this.gridView.Size = new System.Drawing.Size(776, 712);
             this.gridView.TabIndex = 0;
-            this.gridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridView_CellContentClick);
             // 
             // previousPage
             // 
-            this.previousPage.Location = new System.Drawing.Point(62, 23);
+            this.previousPage.Location = new System.Drawing.Point(40, 23);
             this.previousPage.Name = "previousPage";
             this.previousPage.Size = new System.Drawing.Size(75, 23);
             this.previousPage.TabIndex = 1;
@@ -62,7 +62,7 @@ namespace Arduino_Controller
             // 
             // nextPage
             // 
-            this.nextPage.Location = new System.Drawing.Point(233, 23);
+            this.nextPage.Location = new System.Drawing.Point(189, 23);
             this.nextPage.Name = "nextPage";
             this.nextPage.Size = new System.Drawing.Size(75, 23);
             this.nextPage.TabIndex = 2;
@@ -73,7 +73,7 @@ namespace Arduino_Controller
             // page
             // 
             this.page.AutoSize = true;
-            this.page.Location = new System.Drawing.Point(164, 23);
+            this.page.Location = new System.Drawing.Point(134, 23);
             this.page.Name = "page";
             this.page.Size = new System.Drawing.Size(38, 13);
             this.page.TabIndex = 3;
@@ -81,7 +81,7 @@ namespace Arduino_Controller
             // 
             // filterButton
             // 
-            this.filterButton.Location = new System.Drawing.Point(608, 23);
+            this.filterButton.Location = new System.Drawing.Point(662, 23);
             this.filterButton.Name = "filterButton";
             this.filterButton.Size = new System.Drawing.Size(75, 23);
             this.filterButton.TabIndex = 4;
@@ -91,7 +91,7 @@ namespace Arduino_Controller
             // 
             // filterTextBox
             // 
-            this.filterTextBox.Location = new System.Drawing.Point(417, 26);
+            this.filterTextBox.Location = new System.Drawing.Point(471, 26);
             this.filterTextBox.Name = "filterTextBox";
             this.filterTextBox.Size = new System.Drawing.Size(167, 20);
             this.filterTextBox.TabIndex = 5;
@@ -99,17 +99,28 @@ namespace Arduino_Controller
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(414, 9);
+            this.label1.Location = new System.Drawing.Point(468, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(172, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "Filtrovat pomocí inventárního čísla";
+            // 
+            // runScript
+            // 
+            this.runScript.Location = new System.Drawing.Point(304, 23);
+            this.runScript.Name = "runScript";
+            this.runScript.Size = new System.Drawing.Size(75, 23);
+            this.runScript.TabIndex = 7;
+            this.runScript.Text = "Zobrazit";
+            this.runScript.UseVisualStyleBackColor = true;
+            this.runScript.Click += new System.EventHandler(this.runScript_Click);
             // 
             // galeryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(808, 774);
+            this.Controls.Add(this.runScript);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.filterTextBox);
             this.Controls.Add(this.filterButton);
@@ -134,5 +145,6 @@ namespace Arduino_Controller
         private System.Windows.Forms.Button filterButton;
         private System.Windows.Forms.TextBox filterTextBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button runScript;
     }
 }
