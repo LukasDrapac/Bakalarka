@@ -63,7 +63,7 @@ namespace Arduino_Controller
             {
                 if (info[i].Equals(Path.DirectorySeparatorChar))
                 {
-                    Console.WriteLine(info[i]);
+                    //Console.WriteLine(info[i]);
                     index = i;
                 }
             }
@@ -79,11 +79,12 @@ namespace Arduino_Controller
         {
             folders = Directory.GetDirectories(imagesPath);
             maxPage = folders.Length / pageLength;
-            currentPage = 1;
+            currentPage = 1;            
             if(folders.Length % pageLength > 0)
             {
                 maxPage++;
-            }            
+            }
+            page.Text = currentPage + " / " + maxPage;
         }
 
         private void initPage()
@@ -125,6 +126,7 @@ namespace Arduino_Controller
             {
                 deleteRows();
                 currentPage--;
+                page.Text = currentPage + " / " + maxPage;
                 initPage();
             }
         }
@@ -135,7 +137,22 @@ namespace Arduino_Controller
             {
                 deleteRows();
                 currentPage++;
+                page.Text = currentPage + " / " + maxPage;
                 initPage();
+            }
+        }
+
+        private void filterButton_Click(object sender, EventArgs e)
+        {
+            if(filterTextBox.Text != "")
+            {
+                deleteRows();
+                for(int i = 0; i < folders.Length; i++)
+                {   if (folders[i].Contains(filterTextBox.Text))
+                    {
+                        AddDataToGrid(folders[i]);
+                    }                    
+                }
             }
         }
     }

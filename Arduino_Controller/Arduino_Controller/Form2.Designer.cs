@@ -33,6 +33,9 @@ namespace Arduino_Controller
             this.previousPage = new System.Windows.Forms.Button();
             this.nextPage = new System.Windows.Forms.Button();
             this.page = new System.Windows.Forms.Label();
+            this.filterButton = new System.Windows.Forms.Button();
+            this.filterTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +52,7 @@ namespace Arduino_Controller
             // 
             // previousPage
             // 
-            this.previousPage.Location = new System.Drawing.Point(64, 13);
+            this.previousPage.Location = new System.Drawing.Point(62, 23);
             this.previousPage.Name = "previousPage";
             this.previousPage.Size = new System.Drawing.Size(75, 23);
             this.previousPage.TabIndex = 1;
@@ -59,7 +62,7 @@ namespace Arduino_Controller
             // 
             // nextPage
             // 
-            this.nextPage.Location = new System.Drawing.Point(235, 13);
+            this.nextPage.Location = new System.Drawing.Point(233, 23);
             this.nextPage.Name = "nextPage";
             this.nextPage.Size = new System.Drawing.Size(75, 23);
             this.nextPage.TabIndex = 2;
@@ -70,17 +73,46 @@ namespace Arduino_Controller
             // page
             // 
             this.page.AutoSize = true;
-            this.page.Location = new System.Drawing.Point(166, 13);
+            this.page.Location = new System.Drawing.Point(164, 23);
             this.page.Name = "page";
             this.page.Size = new System.Drawing.Size(38, 13);
             this.page.TabIndex = 3;
             this.page.Text = "Strana";
+            // 
+            // filterButton
+            // 
+            this.filterButton.Location = new System.Drawing.Point(608, 23);
+            this.filterButton.Name = "filterButton";
+            this.filterButton.Size = new System.Drawing.Size(75, 23);
+            this.filterButton.TabIndex = 4;
+            this.filterButton.Text = "Vyhledat";
+            this.filterButton.UseVisualStyleBackColor = true;
+            this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
+            // 
+            // filterTextBox
+            // 
+            this.filterTextBox.Location = new System.Drawing.Point(417, 26);
+            this.filterTextBox.Name = "filterTextBox";
+            this.filterTextBox.Size = new System.Drawing.Size(167, 20);
+            this.filterTextBox.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(414, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(172, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Filtrovat pomocí inventárního čísla";
             // 
             // galeryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(808, 774);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.filterTextBox);
+            this.Controls.Add(this.filterButton);
             this.Controls.Add(this.page);
             this.Controls.Add(this.nextPage);
             this.Controls.Add(this.previousPage);
@@ -99,5 +131,8 @@ namespace Arduino_Controller
         private System.Windows.Forms.Button previousPage;
         private System.Windows.Forms.Button nextPage;
         private System.Windows.Forms.Label page;
+        private System.Windows.Forms.Button filterButton;
+        private System.Windows.Forms.TextBox filterTextBox;
+        private System.Windows.Forms.Label label1;
     }
 }

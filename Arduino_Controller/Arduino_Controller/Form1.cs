@@ -68,36 +68,13 @@ namespace Arduino_Controller
         {
             //arduinoComm.measureHeight();
 
-            var proc1 = new ProcessStartInfo();
-            proc1.WorkingDirectory = @"C:/Users/drapa/OneDrive/Plocha/Test";
-            proc1.Verb = "runas";
-            proc1.Arguments = "-jar processing-py.jar mouse_follow.py";
-            proc1.FileName = "java";
+            var process = new ProcessStartInfo();
+            process.FileName = @"C:/Users/drapa/OneDrive/Plocha/processing-3.5.4/processing-java.exe";
+            process.Arguments = $"--sketch=C:/Users/drapa/OneDrive/Plocha/Test2 --run";
+            process.UseShellExecute = false;
+            process.CreateNoWindow = true;
 
-
-            Process.Start(proc1);
-            
-            
-            //var psi = new ProcessStartInfo();
-            //psi.FileName = @"C:/Python27/python.exe";
-            //
-            //var script = @"C:/Users/drapa/PycharmProjects/VPython/main.py";
-            //psi.Arguments = $"\"{script}";
-            //
-            //psi.UseShellExecute = false;
-            //psi.CreateNoWindow = true;
-            //psi.RedirectStandardOutput = true;
-            //psi.RedirectStandardError = true;
-            //
-            //var results = "";
-            //
-            //using (var process = Process.Start(psi))
-            //{
-            //    //results = process.StandardOutput.ReadToEnd();
-            //}
-            //
-            //Console.WriteLine("Results:");
-            //Console.WriteLine(results);
+            Process.Start(process);
         }
 
         //Inicializace ComboBoxu s vyberem poctu snimku
@@ -322,7 +299,11 @@ namespace Arduino_Controller
 
         private void openGaleryButton_Click(object sender, EventArgs e)
         {
-            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder";            
+            string testingPath = "C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder";
+            
+            galeryForm galery = new galeryForm(testingPath);
+            galery.Show();
+
             //string folderName;
             //for(int i = 1; i <= 326; i++)
             //{
@@ -340,8 +321,6 @@ namespace Arduino_Controller
             //    }
             //    Directory.CreateDirectory("C:/Users/drapa/OneDrive/Plocha/Image_Crop/Tests_folder/KR_" + folderName);
             //}
-            galeryForm galery = new galeryForm(testingPath);
-            galery.Show();
         }
     }
 }
