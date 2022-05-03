@@ -229,10 +229,10 @@ namespace Arduino_Controller
             // 
             // measureButton
             // 
-            this.measureButton.Location = new System.Drawing.Point(582, 490);
+            this.measureButton.Location = new System.Drawing.Point(698, 486);
             this.measureButton.Margin = new System.Windows.Forms.Padding(2);
             this.measureButton.Name = "measureButton";
-            this.measureButton.Size = new System.Drawing.Size(75, 28);
+            this.measureButton.Size = new System.Drawing.Size(86, 23);
             this.measureButton.TabIndex = 24;
             this.measureButton.Text = "Změřit výšku";
             this.measureButton.UseVisualStyleBackColor = true;
@@ -240,7 +240,7 @@ namespace Arduino_Controller
             // 
             // openGaleryButton
             // 
-            this.openGaleryButton.Location = new System.Drawing.Point(1055, 473);
+            this.openGaleryButton.Location = new System.Drawing.Point(698, 433);
             this.openGaleryButton.Name = "openGaleryButton";
             this.openGaleryButton.Size = new System.Drawing.Size(75, 23);
             this.openGaleryButton.TabIndex = 25;

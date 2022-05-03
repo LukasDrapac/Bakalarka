@@ -42,6 +42,10 @@ void loop() {
     parseMessage(stringValue);
     incommingMessage = false;
   }
+
+  //String distance = measureDistance();
+  //Serial.println(distance);
+  //delay(500);
 }
 
 
@@ -95,7 +99,7 @@ void commandCLK00(int steps){
 String measureDistance(){
    int distance = 0;
    int total = 0;
-   for(int i = 0; i < 20; i++){
+   for(int i = 0; i < 30; i++){
     distanceSensor.startRanging();
     while (!distanceSensor.checkForDataReady()){
       delay(1);

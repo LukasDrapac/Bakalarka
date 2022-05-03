@@ -29,7 +29,7 @@ namespace Arduino_Controller
                 croppedImage = null;
             }
             images = Directory.GetFiles(path);
-            Console.WriteLine(images);
+            //Console.WriteLine(images);
             for (int i = images.Length - 1; i >= 0; i--)
             {
                 string name = imageName + "_" + (i) + ".jpg";

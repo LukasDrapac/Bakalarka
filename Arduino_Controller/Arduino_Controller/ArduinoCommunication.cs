@@ -88,6 +88,7 @@ namespace Arduino_Controller
                         
         }
 
+        //Zmeri vysku kraslice
         public int measureHeight()
         {
             string commandString = "MEASR";

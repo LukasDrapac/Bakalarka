@@ -44,7 +44,7 @@ namespace Arduino_Controller
 
             gridView.Columns[0].Name = "Inventární číslo";
             gridView.Columns[1].Name = "Cesta ke složce";
-
+            gridView.Columns[1].Visible = false;
             gridView.Columns.Add(imageColumn);
             imageColumn.Name = "Úvodní fotka";
             imageColumn.ImageLayout = DataGridViewImageCellLayout.Stretch;
@@ -58,8 +58,7 @@ namespace Arduino_Controller
         //Prida radek do DataGridVied
         private void AddDataToGrid(string info)
         {
-            string[] hodnota = new string[2];
-            hodnota[1] = info;
+            string hodnota;
             
             int index = -1;
             for(int i = 0; i < info.Length; i++)
@@ -70,11 +69,11 @@ namespace Arduino_Controller
                     index = i;
                 }
             }
-            hodnota[0] = info.Substring(index + 1);
+            hodnota = info.Substring(index + 1);
 
             Image img = Image.FromFile(info + Path.DirectorySeparatorChar + "Processed_Image.jpg");
 
-            gridView.Rows.Add(hodnota[0], hodnota[1], img);
+            gridView.Rows.Add(hodnota, info, img);
             
         }
 
@@ -162,11 +161,17 @@ namespace Arduino_Controller
         //Spusti Processing script a preda argument s adresarem kraslice
         private void runScript_Click(object sender, EventArgs e)
         {
+            string scriptPathpath = "../../../../ImageProcess";
+            scriptPathpath = Path.GetFullPath(scriptPathpath);
+
+            string javaProcessingPath = "../../../../processing-3.5.4";
+            javaProcessingPath = Path.GetFullPath(javaProcessingPath);
+
             Console.WriteLine(gridView.CurrentRow.Cells[1].Value.ToString());
             string argument = gridView.CurrentRow.Cells[1].Value.ToString();
             var process = new ProcessStartInfo();
-            process.FileName = @"C:/Users/drapa/OneDrive/Plocha/processing-3.5.4/processing-java.exe";
-            process.Arguments = $"--sketch=C:/Users/drapa/OneDrive/Plocha/ImageProcess --run " + argument + "/Processed_Image.jpg";
+            process.FileName = javaProcessingPath + @"/processing-java.exe";
+            process.Arguments = $"--sketch=" + scriptPathpath + " --run " + argument + "/Processed_Image.jpg";
             process.UseShellExecute = false;
             process.CreateNoWindow = true;
 
